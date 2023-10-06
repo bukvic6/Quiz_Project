@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using QuizProject.Model;
-using QuizProject.Model.ModelDTO;
+using QuizProject.Domain.Model;
+using QuizProject.Domain.Model.ModelDTO;
 
 namespace QuizProject.MappingConfigurations
 {

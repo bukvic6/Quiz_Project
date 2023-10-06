@@ -86,10 +86,17 @@ function UserHome() {
                         {question && (
                                 <>
                                 <CardHeader>
-                                <Heading size='md'>{question.questionText}</Heading>
+                                <Heading size='md'> >>> {question.questionText} ?</Heading>
                                 </CardHeader>
                                 <CardBody>
                                     <Text>{question.answers}</Text>
+                                    <RadioGroup onChange={setValue} value={value}>
+                                        <Stack direction='row'>
+                                            <Radio value='1'>First</Radio>
+                                            <Radio value='2'>Second</Radio>
+                                            <Radio value='3'>Third</Radio>
+                                        </Stack>
+                                    </RadioGroup>
                                 </CardBody>
                                 <CardFooter gap={2}>
                                     <Flex flexDirection="column" gap={ 5 }>
@@ -98,7 +105,7 @@ function UserHome() {
                                                 <IconButton icon={<ArrowBackIcon />} flex='1' onClick={ goBack }></IconButton>
 
                                                 ) }
-                                            <Input flex='1' value={answer} onChange={e => setAnswer(e.target.value)}></Input>
+                                                <Input flex='1' value={answer} onChange={e => setAnswer(e.target.value)}></Input>
                                                 {index != questions.length - 1 ? (
                                                     <IconButton icon={<ArrowForwardIcon />} flex='1' onClick={() => handleClick(question.id)}></IconButton>
                                                 ) : (

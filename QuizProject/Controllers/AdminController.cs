@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuizProject.Model.ModelDTO;
-using QuizProject.Service.IService;
+using QuizProject.Domain.Model.ModelDTO;
+using QuizProject.Infrastructure.Service.IService;
 using System.Security.Claims;
 
 namespace QuizProject.Controllers
 {
     [Route("api/Admin")]
     [ApiController]
-    public class AdminController : Controller
+    public class AdminController : SharedController
     {
 
         private readonly ILogger<AdminController> _logger;
         private readonly IAdminService _adminService;
+
 
         public AdminController(ILogger<AdminController> logger, IAdminService adminService)
         {
@@ -26,8 +27,16 @@ namespace QuizProject.Controllers
         public async Task<ActionResult<QuestionDTO>> CreateQuestion(QuestionDTO questionDTO)
         {
             var resultModel = await _adminService.CreateQuestion(questionDTO);
-            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var email = GetUserFromContex();
             _logger.LogInformation("User with " + email + " email created question");
+            return Ok(resultModel);
+        }
+
+        [HttpPost("updateQuestion")]
+        [Authorize]
+        public async Task<ActionResult<QuestionDTO>> UpdateQuestion(QuestionDTO questionDTO)
+        {
+            var resultModel = await _adminService.ChangeQuestion(questionDTO);
             return Ok(resultModel);
         }
 
@@ -46,11 +55,12 @@ namespace QuizProject.Controllers
             bool deletionResult = await _adminService.DeleteQuestion(id);
             if (deletionResult)
             {
-                var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                var email = GetUserFromContex();
                 _logger.LogInformation("User with " + email + " email deleted question");
                 return NoContent();
             }
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
+
     }
 }

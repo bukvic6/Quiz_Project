@@ -1,0 +1,15 @@
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Infrastructure.deps.json
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Infrastructure.dll
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Infrastructure.pdb
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Domain.dll
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Domain.pdb
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.AssemblyInfo.cs
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.csproj.CopyComplete
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.dll
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\refint\QuizProject.Infrastructure.dll
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.pdb
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\ref\QuizProject.Infrastructure.dll

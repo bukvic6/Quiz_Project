@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Data;
-using QuizProject.Data.DbInitializer;
+using QuizProject.Domain.Data;
+using QuizProject.Domain.Data.DbInitializer;
 using QuizProject.OptionsSetup;
 using Serilog;
-using QuizProject.Repository;
-using QuizProject.Repository.IRepository;
-using QuizProject.Service;
-using QuizProject.Service.IService;
+using QuizProject.Infrastructure.Repository;
+using QuizProject.Infrastructure.Repository.IRepository;
+using QuizProject.Infrastructure.Service;
+using QuizProject.Infrastructure.Service.IService;
 
 var AllowSpecificOrigins = "_allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);

@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizProject", "QuizProject\QuizProject.csproj", "{37367C7E-ABDE-437D-9D8B-5F4520B6CA23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2DD54747-AD0C-4E2B-83DC-5592C093AE59} = {2DD54747-AD0C-4E2B-83DC-5592C093AE59}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizProject.Domain", "QuizProject.Domain\QuizProject.Domain.csproj", "{146CCB5E-6962-44D3-BB89-7E1F269D5731}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizProject.Domain", "QuizProject.Domain\QuizProject.Domain.csproj", "{146CCB5E-6962-44D3-BB89-7E1F269D5731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizProject.Infrastructure", "Infrastructure\QuizProject.Infrastructure.csproj", "{2DD54747-AD0C-4E2B-83DC-5592C093AE59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{146CCB5E-6962-44D3-BB89-7E1F269D5731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{146CCB5E-6962-44D3-BB89-7E1F269D5731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{146CCB5E-6962-44D3-BB89-7E1F269D5731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD54747-AD0C-4E2B-83DC-5592C093AE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD54747-AD0C-4E2B-83DC-5592C093AE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD54747-AD0C-4E2B-83DC-5592C093AE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD54747-AD0C-4E2B-83DC-5592C093AE59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

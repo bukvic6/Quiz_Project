@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuizProject.Model.ModelDTO;
-using QuizProject.Service.IService;
+using QuizProject.Domain.Model.ModelDTO;
+using QuizProject.Infrastructure.Service.IService;
 using System.Security.Claims;
 
 namespace QuizProject.Controllers

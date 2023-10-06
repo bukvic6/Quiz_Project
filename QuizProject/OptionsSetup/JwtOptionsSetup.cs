@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using QuizProject.Model;
+using QuizProject.Domain.Model;
 
 namespace QuizProject.OptionsSetup
 {

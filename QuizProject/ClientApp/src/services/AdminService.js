@@ -13,5 +13,8 @@ class AdminService {
     deleteQuestion(id) {
         return api.delete(`${ADMIN_API}/delete/${id}`)
     }
+    updateQuestion(question) {
+        return api.post(ADMIN_API + "/updateQuestion", question)
+    }
 }
 export default new AdminService()

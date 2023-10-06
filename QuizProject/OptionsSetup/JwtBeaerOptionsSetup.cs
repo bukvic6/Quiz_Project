@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using QuizProject.Model;
+using QuizProject.Domain.Model;
 using System.Text;
 
 namespace QuizProject.OptionsSetup
@@ -9,10 +9,12 @@ namespace QuizProject.OptionsSetup
     public class JwtBeaerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
     {
         private readonly JwtOptions _jwtOptions;
+
         public JwtBeaerOptionsSetup(IOptions<JwtOptions> jwtOptions)
         {
             _jwtOptions = jwtOptions.Value;
         }
+
         public void Configure(JwtBearerOptions options)
         {
             options.TokenValidationParameters = new()
