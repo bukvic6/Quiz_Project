@@ -7,7 +7,7 @@ namespace QuizProject.Domain.Model
         public int Id { get; set; }
         public string QuestionText { get; set; }
         public ICollection<Answer> Answers { get; } = new List<Answer>();
-        public int RightAnswer { get; set; }
+        public string RightAnswer { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

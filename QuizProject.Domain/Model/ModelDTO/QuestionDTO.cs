@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string QuestionText { get; set; }
         public List<AnswersDTO> Answers { get; set; }
-        public int RightAnswer { get; set; }
+        public string RightAnswer { get; set; }
     }
 }
