@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
-import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, Box, Center, Flex, Button, FormControl, Input, Divider, AbsoluteCenter } from '@chakra-ui/react'
+import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, Box, Center, Flex, Divider, AbsoluteCenter } from '@chakra-ui/react'
 
 
 function Results() {
@@ -32,7 +32,7 @@ function Results() {
                         </AbsoluteCenter>
                     </Box>
                     <TableContainer w='70vw'>
-                        <Table variant='striped' colorScheme='blackAlpha'>
+                        <Table variant='striped' colorScheme='blue'>
                             <Thead>
                                 <Tr>
                                     <Th>Username</Th>

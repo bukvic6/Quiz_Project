@@ -13,3 +13,5 @@ C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.
 C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\refint\QuizProject.Infrastructure.dll
 C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.pdb
 C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\ref\QuizProject.Infrastructure.dll
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\bin\Debug\net7.0\QuizProject.Infrastructure.runtimeconfig.json
+C:\Users\Dragan\Desktop\QuizProject\Infrastructure\obj\Debug\net7.0\QuizProject.Infrastructure.genruntimeconfig.cache

@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
-import { Card, CardHeader, Heading, CardFooter, Button, Radio, Center, Stack, RadioGroup, Divider, AbsoluteCenter, Box, Flex } from '@chakra-ui/react'
+import { Card, CardHeader, Heading, CardFooter, Button, Radio, Center, Stack, RadioGroup, Divider, AbsoluteCenter, CardBody, Box, Flex } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
 
 
@@ -40,46 +40,51 @@ function UserHome() {
         }
     }
 
+
     useEffect(() => {
         getQuestions();
     },[]);
     return (
-        <Box>
+        <Box  bgGradient="radial(gray.300, blue.600, pink.200)" >
             <Center>
                 <Flex flexDirection="column">
                     <Box position="relative" padding="10">
                         <Divider />
-                        <AbsoluteCenter bg="white" px="4">
-                            Quiz
+                        <AbsoluteCenter  px="10">
                         </AbsoluteCenter>
                     </Box>
-                    <Card w="500px" align="center">
+                    <Card w="70vw" align="center" background='#d5dfed' >
                         {questions.length > 0 && (
                             <>
                                 <CardHeader>
-                                    <Heading size="md">Quiz Questions</Heading>
+                                    <Heading color={"blue.700"} fontFamily={ "mono"} size="md">Quiz Questions</Heading>
                                 </CardHeader>
-                                <div>
+                                <Stack spacing='4' w="50vw">
                                     {questions.map((question) => (
-                                        <div key={question.id}>
-                                            <h3>{question.questionText}</h3>
-                                            <RadioGroup
-                                            >
-                                                <Stack direction="column">
-                                                    {question.answers.map((answer) => (
-                                                        <Radio
-                                                            key={answer.id}
-                                                            value={answer.answerText}
-                                                            onChange={(e) => handleRadioChange(question.id, e.target.value)}
-                                                        >
-                                                            {answer.answerText}
-                                                        </Radio>
-                                                    ))}
-                                                </Stack>
-                                            </RadioGroup>
-                                        </div>
+                                        <Card key={question.id} h="200px" alignItems={"center"}>
+
+                                            <CardHeader>
+                                                <Heading size='md'>{question.questionText}</Heading>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <RadioGroup
+                                                >
+                                                    <Stack direction="row" spacing='10'>
+                                                        {question.answers.map((answer) => (
+                                                            <Radio size='lg' name='1' colorScheme='pink'
+                                                                key={answer.id}
+                                                                value={answer.answerText}
+                                                                onChange={(e) => handleRadioChange(question.id, e.target.value)}
+                                                            >
+                                                                {answer.answerText}
+                                                            </Radio>
+                                                        ))}
+                                                    </Stack>
+                                                </RadioGroup>
+                                            </CardBody>
+                                        </Card>
                                     ))}
-                                </div>
+                                </Stack>
                                 <CardFooter gap={2}>
                                     <Button onClick={handleSubmit}>Submit</Button>
                                 </CardFooter>

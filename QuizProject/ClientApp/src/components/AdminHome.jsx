@@ -252,6 +252,7 @@ function AdminHome() {
                     }
                     <Box position="relative" padding="10">
                         <Button
+                            
                             colorScheme="blue"
                             onClick={() => {
                                 setIsEditing(false);
@@ -294,7 +295,7 @@ function AdminHome() {
                                                         Delete
                                                     </Button>
                                                     <Button
-                                                        colorScheme="green"
+                                                        colorScheme="blue"
                                                         size="md"
                                                         onClick={() => handleUpdateClick(val)}
                                                     >

@@ -10,3 +10,5 @@ C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\obj\Debug\net7.0\QuizProj
 C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\obj\Debug\net7.0\refint\QuizProject.Domain.dll
 C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\obj\Debug\net7.0\QuizProject.Domain.pdb
 C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\obj\Debug\net7.0\ref\QuizProject.Domain.dll
+C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\bin\Debug\net7.0\QuizProject.Domain.runtimeconfig.json
+C:\Users\Dragan\Desktop\QuizProject\QuizProject.Domain\obj\Debug\net7.0\QuizProject.Domain.genruntimeconfig.cache
