@@ -21,18 +21,23 @@ namespace QuizProject.Infrastructure.Repository
             _context = context;
         }
 
+        public async Task ChangeAnswers(ICollection<Answer> answers)
+        {
+            await _context.Answers.AddRangeAsync(answers);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<int> ChangeQuestion(Question questionEntity)
         {
             _context.Entry(questionEntity).State = EntityState.Modified;
             return await _context
                 .SaveChangesAsync();
-/*
-            var questionFromDatabase = await _context.Questions.FindAsync(questionEntity.Id);
-            if (questionFromDatabase != null)
-            {
-                _mapper.Map(questionFromDatabase, questionEntity);
-                return await _context.SaveChangesAsync();
-            }*/
+        }
+
+        public async Task CreateAnswers(List<Answer> answers)
+        {
+            await _context.Answers.AddRangeAsync(answers);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Question> CreateQuestion(Question question)
@@ -42,6 +47,21 @@ namespace QuizProject.Infrastructure.Repository
             await _context
                 .SaveChangesAsync();
             return question;
+        }
+
+        public async Task<bool> DeleteAnswer(int id)
+        {
+            try
+            {
+                _context.Answers.Remove(new Answer { Id = id });
+                 await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
         }
 
         public async Task<bool> DeleteQuestion(int id)
@@ -65,7 +85,7 @@ namespace QuizProject.Infrastructure.Repository
 
         public async Task<List<Question>> GetAllQuestions()
         {
-            return await _context.Questions
+            return await _context.Questions.Include(q => q.Answers)
                 .ToListAsync();
         }
     }

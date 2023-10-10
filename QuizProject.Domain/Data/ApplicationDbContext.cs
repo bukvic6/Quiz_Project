@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizProject.Domain.Model;
+using System.Reflection.Metadata;
 
 namespace QuizProject.Domain.Data
 {
@@ -11,8 +12,8 @@ namespace QuizProject.Domain.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
         public DbSet<QuizResults> QuizzResults { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<QuizResults>()
@@ -21,14 +22,10 @@ namespace QuizProject.Domain.Data
             modelBuilder.Entity<Question>()
                 .HasQueryFilter(x => x.IsDeleted == false);
 
-
             modelBuilder.Entity<Question>()
                 .HasMany(e => e.Answers)
                 .WithOne(e => e.Question)
-                .HasForeignKey(e => e.)
                 .IsRequired();
-
-
         }
     }
 }

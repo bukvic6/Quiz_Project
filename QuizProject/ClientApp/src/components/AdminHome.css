@@ -1,7 +1,9 @@
 ﻿.popup-content {
     margin: auto;
+    height: fit-content;
     background: rgb(255, 255, 255);
-    padding: 100px;
+    padding: 70px;
+    border-radius: 10px;
 }
 
 .popup-arrow {
@@ -9,7 +11,7 @@
 }
 
 [role='tooltip'].popup-content {
-    width: 200px;
+    width: 100px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
 }
 

@@ -11,6 +11,9 @@ class AdminService {
         return api.post(ADMIN_API + "/createQuestion", question)
     }
     deleteQuestion(id) {
+        return api.delete(`${ADMIN_API}/deleteAnswer/${id}`)
+    }
+    deleteAnswer(id) {
         return api.delete(`${ADMIN_API}/delete/${id}`)
     }
     updateQuestion(question) {

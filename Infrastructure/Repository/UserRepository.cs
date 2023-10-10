@@ -30,7 +30,7 @@ namespace QuizProject.Infrastructure.Repository
         public async Task<List<Question>> GetAllQuestions()
         {
 
-            return await _context.Questions
+            return await _context.Questions.Include(q => q.Answers)
                 .ToListAsync();
         }
 

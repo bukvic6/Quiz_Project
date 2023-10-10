@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuizProject.Domain.Model.ModelDTO;
 using QuizProject.Infrastructure.Service.IService;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace QuizProject.Controllers
 {
@@ -32,6 +34,18 @@ namespace QuizProject.Controllers
             return Ok(resultModel);
         }
 
+        [HttpDelete("deleteAnswer/{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteAnswer(int id)
+        {
+            bool deleteAnswer = await _adminService.DeleteQuestion(id);
+            if (deleteAnswer)
+            {
+                return NoContent();
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
         [HttpPost("updateQuestion")]
         [Authorize]
         public async Task<ActionResult<QuestionDTO>> UpdateQuestion(QuestionDTO questionDTO)
@@ -45,6 +59,7 @@ namespace QuizProject.Controllers
         public async Task<ActionResult<List<QuestionDTO>>> GetQuestions()
         {
             var questions = await _adminService.GetQuestions();
+
             return Ok(questions);
         }
 

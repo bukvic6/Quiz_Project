@@ -26,6 +26,7 @@ namespace QuizProject.Infrastructure.Service
         {
             var questionEntity = _mapper.Map<QuestionDTO, Question>(questionDTO);
             var cretaed = await _adminRepository.ChangeQuestion(questionEntity);
+            await _adminRepository.ChangeAnswers(questionEntity.Answers);
             return cretaed;
         }
 
@@ -35,12 +36,15 @@ namespace QuizProject.Infrastructure.Service
             var cretaed = await _adminRepository.CreateQuestion(questionEntity);
             var createdDTO = _mapper.Map<Question, QuestionDTO>(cretaed);
             return createdDTO;
-
         }
 
         public async Task<bool> DeleteQuestion(int id)
         {
             return await _adminRepository.DeleteQuestion(id);
+        }
+        public async Task<bool> DeleteAnswer(int id)
+        {
+            return await _adminRepository.DeleteAnswer(id);
         }
 
         public async Task<List<QuestionDTO>> GetQuestions()

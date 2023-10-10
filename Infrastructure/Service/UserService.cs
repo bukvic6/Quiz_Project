@@ -32,11 +32,11 @@ namespace QuizProject.Infrastructure.Service
             foreach (var userAnswer in answer)
             {
                 int questionID = userAnswer.QuestionId;
-                int checkAnswer = userAnswer.SelectedAnswerId;
+                string checkAnswer = userAnswer.userAnswer;
                 Question question = questions.FirstOrDefault(q => q.Id == questionID)!;
                 if (question != null)
                 {
-                    if (checkAnswer == question.RightAnswer)
+                    if (checkAnswer.Equals(question.RightAnswer))
                     {
                         calculateScore += 1;
                     }
