@@ -3,7 +3,7 @@ import AuthService from '../services/AuthService';
 import { useNavigate } from '../../node_modules/react-router-dom/index';
 import { Button, Center, SimpleGrid, Card, Image, Stack, CardBody, Heading, Input, CardFooter } from '@chakra-ui/react'
 
-function LoginPage() {
+function LoginPage(props) {
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -19,6 +19,7 @@ function LoginPage() {
                 token: data.token,
             })
             localStorage.setItem('token', userDataJSON);
+            props.updateLoginStatus(true);
             navigate("/home")
         }
         catch (error) {

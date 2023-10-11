@@ -16,6 +16,10 @@ namespace QuizProject.Domain.Data.DbInitializer
         {
             _context.Database.EnsureCreated();
 
+            if (_context.Users.Any())
+            {
+                return;
+            }
 
             var salt = RandomNumberGenerator.GetBytes(128 / 8);
             var hash = Rfc2898DeriveBytes.Pbkdf2("Admin123", salt, 10000, HashAlgorithmName.SHA256, 256 / 8);
@@ -29,6 +33,17 @@ namespace QuizProject.Domain.Data.DbInitializer
             foreach (User user in users)
             {
                 _context.Users.Add(user);
+            }
+            _context.SaveChanges();
+            var questions = new Question[]
+            {
+                new Question{QuestionText = "2 + 2" , RightAnswer = "4"},
+                new Question{QuestionText = "2 + 5" , RightAnswer = "7"},
+                new Question{QuestionText = "2 + 3" , RightAnswer = "5"},
+            };
+            foreach (Question question in questions)
+            {
+                _context.Questions.Add(question);
             }
             _context.SaveChanges();
             var answers = new Answer[]
@@ -52,17 +67,6 @@ namespace QuizProject.Domain.Data.DbInitializer
             foreach (Answer answer in answers)
             {
                 _context.Answers.Add(answer);
-            }
-            _context.SaveChanges();
-            var questions = new Question[]
-            {
-                new Question{QuestionText = "2 + 2" , RightAnswer = "4"},
-                new Question{QuestionText = "2 + 5" , RightAnswer = "7"},
-                new Question{QuestionText = "2 + 3" , RightAnswer = "7"},
-            };
-            foreach (Question question in questions)
-            {
-                _context.Questions.Add(question);
             }
             _context.SaveChanges();
 

@@ -42,16 +42,23 @@ namespace QuizProject.Infrastructure.Service
         {
             return await _adminRepository.DeleteQuestion(id);
         }
-        public async Task<bool> DeleteAnswer(int id)
-        {
-            return await _adminRepository.DeleteAnswer(id);
-        }
 
-        public async Task<List<QuestionDTO>> GetQuestions()
+        public async Task<List<QuestionDTO>> GetQuestions(int pageNumber, int pageSize)
         {
-            var questions = await _adminRepository.GetAllQuestions();
+            var questions = await _adminRepository.GetAllQuestions(pageNumber,pageSize);
             var questionListDTO = _mapper.Map<List<QuestionDTO>>(questions);
             return questionListDTO;
+        }
+
+        public async Task<int> GetCount()
+        {
+            int count = await _adminRepository.GetCount();
+            return count;
+        }
+
+        public async Task<bool> DeleteAnswers(List<int> answersToDelete)
+        {
+            return await _adminRepository.DeleteAnswers(answersToDelete);
         }
     }
 }

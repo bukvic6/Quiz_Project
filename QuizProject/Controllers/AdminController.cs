@@ -34,11 +34,11 @@ namespace QuizProject.Controllers
             return Ok(resultModel);
         }
 
-        [HttpDelete("deleteAnswer/{id}")]
+        [HttpPost("deleteAnswer")]
         [Authorize]
-        public async Task<ActionResult> DeleteAnswer(int id)
+        public async Task<ActionResult> DeleteAnswer(List<int> answersToDelete)
         {
-            bool deleteAnswer = await _adminService.DeleteQuestion(id);
+            bool deleteAnswer = await _adminService.DeleteAnswers(answersToDelete);
             if (deleteAnswer)
             {
                 return NoContent();
@@ -54,11 +54,11 @@ namespace QuizProject.Controllers
             return Ok(resultModel);
         }
 
-        [HttpGet]
+        [HttpGet("{pn}/{ps}")]
         [Authorize]
-        public async Task<ActionResult<List<QuestionDTO>>> GetQuestions()
+        public async Task<ActionResult<List<QuestionDTO>>> GetQuestions(int pn, int ps)
         {
-            var questions = await _adminService.GetQuestions();
+            var questions = await _adminService.GetQuestions(pn, ps);
 
             return Ok(questions);
         }
@@ -77,5 +77,12 @@ namespace QuizProject.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<int> GetCount()
+        {
+            int count = await _adminService.GetCount();
+            return count;
+        }
     }
 }

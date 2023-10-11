@@ -4,20 +4,23 @@ const ADMIN_API = `https://localhost:7192/api/Admin`;
 
 
 class AdminService {
-    getQuestions() {
-        return api.get(ADMIN_API);
+    getQuestions(pn,ps) {
+        return api.get(`${ADMIN_API}/${pn}/${ps}`);
     }
     createQuestion(question) {
         return api.post(ADMIN_API + "/createQuestion", question)
     }
-    deleteQuestion(id) {
-        return api.delete(`${ADMIN_API}/deleteAnswer/${id}`)
+    deleteAnswer(answersToDelete) {
+        return api.post(`${ADMIN_API}/deleteAnswer`, answersToDelete)
     }
-    deleteAnswer(id) {
+    deleteQuestion(id) {
         return api.delete(`${ADMIN_API}/delete/${id}`)
     }
     updateQuestion(question) {
         return api.post(ADMIN_API + "/updateQuestion", question)
+    }
+    getCount() {
+        return api.get(ADMIN_API + "/count")
     }
 }
 export default new AdminService()

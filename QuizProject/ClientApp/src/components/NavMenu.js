@@ -12,7 +12,6 @@ export class NavMenu extends Component {
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
         collapsed: true,
-        isLoggedIn: !!localStorage.getItem('token'),
     };
   }
 
@@ -24,6 +23,7 @@ export class NavMenu extends Component {
     }
     handleLogout = () => {
         localStorage.clear();
+        this.props.updateLoginStatus(false);
         window.location.href = '/';
     };
 
@@ -31,7 +31,7 @@ export class NavMenu extends Component {
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
-          <NavbarBrand tag={Link} to="/">QuizProject</NavbarBrand>
+          <NavbarBrand tag={Link} to="/home">QuizProject</NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
           <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                 <ul className="navbar-nav flex-grow">
@@ -40,14 +40,15 @@ export class NavMenu extends Component {
                  <NavLink tag={Link} className="text-dark" to="/Home">Home</NavLink>
                 </NavItem>)}
                 <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/results">Results</NavLink>
+                {this.props.isLoggedIn && (
+                <NavLink tag={Link} className="text-dark" to="/results">Results</NavLink>)}
                 </NavItem>
                 <NavItem>
-                {this.state.isLoggedIn ? (
-                <NavLink tag={Link} className="text-dark" to="/" onClick={this.handleLogout}>Logout</NavLink>
-                ) : (
-                <NavLink tag={Link} className="text-dark" to="/">Login</NavLink>
-                            )}
+                    {this.props.isLoggedIn ?(
+                        <NavLink tag={Link} className="text-dark" to="/" onClick={this.handleLogout}>Logout</NavLink>
+                    ) : (
+                        <NavLink tag={Link} className="text-dark" to="/">Login</NavLink>
+                    )}
                 </NavItem>
             </ul>
           </Collapse>

@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from "react";
+﻿
+import { useEffect, useState } from "react";
 import AdminService from "../services/AdminService";
 import Popup from "reactjs-popup";
 import "./AdminHome.css";
@@ -24,8 +25,11 @@ import {
     Divider,
     AbsoluteCenter,
     Stack,
+    Spacer,
+    IconButton,
+    ButtonGroup,
 } from "@chakra-ui/react";
-import { DeleteIcon } from '@chakra-ui/icons'
+import { DeleteIcon, ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 
 function AdminHome() {
     const [question, setQuestion] = useState("");
@@ -36,12 +40,37 @@ function AdminHome() {
     const [isPopupOpen, setPopoupOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [answerList, setAnswerList] = useState([]);
+    const [answerToDelete, setAnswerToDelete] = useState([]);
     const [value, setValue] = useState("");
+    const [rowCount, setRowCount] = useState(0);
+    const pageSize = 3;
+    const [pageNumber, setPageNumber] = useState(1);
+    const total = Math.ceil(rowCount / pageSize)
 
     const getQuestions = async () => {
-        const { data } = await AdminService.getQuestions();
-        setQuestions(data);
+        try {
+            const { data } = await AdminService.getQuestions(pageNumber, pageSize);
+            setQuestions(data);
+        }
+        catch {
+            console.error("Error fetching data")
+        }
     };
+    const getCount = async () => {
+        try {
+            const { data } = await AdminService.getCount();
+            setRowCount(data)
+        }
+        catch {
+            console.error("Error getting item count")
+        }
+    }
+
+    const deleteAnswer = async () => {
+        console.log(answerToDelete);
+        await AdminService.deleteAnswer(answerToDelete);
+    }
+
     function addAnswerToList() {
         if (isEditing === true) {
             const ans = {
@@ -62,9 +91,22 @@ function AdminHome() {
         
     }
 
+    const handlePreviousPage = () => {
+        if (pageNumber > 1) {
+            setPageNumber(pageNumber - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        var hasMorePages = pageNumber < total;
+        if (hasMorePages === true) {
+            setPageNumber(pageNumber + 1);
+        }
+    };
 
     function deleteFromAnswerList(id) {
         if (isEditing === true) {
+            setAnswerToDelete([answerToDelete.push(id)])
             const newList = answers.filter((item) => {
                 return item.id !== id
             })
@@ -78,8 +120,10 @@ function AdminHome() {
         }
 
     }
+
     const addQuestion = async (e) => {
         e.preventDefault();
+        setPopoupOpen(false);
         let newAnswerList = answerList.map((item) => {
             return { answerText: item.answerText };
         })
@@ -89,18 +133,20 @@ function AdminHome() {
             rightAnswer: solution,
         };
         try {
-            const { data } = await AdminService.createQuestion(questions);
+            await AdminService.createQuestion(questions);
             setQuestion("");
             setAnswer([]);
             setSolution("");
             getQuestions();
-            setPopoupOpen(false);
+            getCount();
         } catch (error) {
             console.log(error);
         }
     };
+
     const changeQuestion = async (e) => {
         e.preventDefault();
+        setPopoupOpen(false);
         const questions = {
             id: questionId,
             questionText: question,
@@ -109,6 +155,7 @@ function AdminHome() {
         };
         try {
             await AdminService.updateQuestion(questions);
+            deleteAnswer();
             getQuestions();
         } catch (error) {
             console.log(error);
@@ -129,14 +176,14 @@ function AdminHome() {
         setAnswer(questionData.answers);
         setSolution(questionData.rightAnswer);
         setQuestionId(questionData.id);
-
         setIsEditing(true);
         setPopoupOpen(true);
     };
 
     useEffect(() => {
         getQuestions();
-    }, []);
+        getCount();
+    }, [pageNumber]);
     return (
         <Box>
             <Center>
@@ -236,7 +283,8 @@ function AdminHome() {
                                                             onClick={() => {
                                                                 console.log("modal closed");
                                                                 setAnswerList([])
-                                                                close();
+                                                                setAnswerToDelete([])
+                                                                setPopoupOpen(false);
                                                             }}
                                                         >
                                                             Close
@@ -251,21 +299,28 @@ function AdminHome() {
                         </Popup>
                     }
                     <Box position="relative" padding="10">
-                        <Button
-                            
-                            colorScheme="blue"
-                            onClick={() => {
-                                setIsEditing(false);
-                                setPopoupOpen(true);
-                            }}
-                        >
-                            Add new question
-                        </Button>
                         <Divider />
                         <AbsoluteCenter bg="white" px="4">
                             Question list
                         </AbsoluteCenter>
                     </Box>
+                    <Flex>
+                        <Box p='4'>
+                            <Button
+                                colorScheme="blue"
+                                onClick={() => {
+                                    setIsEditing(false);
+                                    setPopoupOpen(true);
+                                }}>
+                                Add new question
+                            </Button>
+                        </Box>
+                        <Spacer/>
+                        <ButtonGroup gap='2'>
+                            <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon/>}/>
+                            <IconButton onClick={handleNextPage} icon={ <ArrowForwardIcon/> }/ >
+                        </ButtonGroup>
+                    </Flex>
                     <TableContainer w="70vw">
                         <Table variant="striped" colorScheme="blackAlpha">
                             <Thead>

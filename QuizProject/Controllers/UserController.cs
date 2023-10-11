@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizProject.Domain.Model;
 using QuizProject.Domain.Model.ModelDTO;
+using QuizProject.Infrastructure.Service;
 using QuizProject.Infrastructure.Service.IService;
 using System.Security.Claims;
 
@@ -46,11 +47,40 @@ namespace QuizProject.Controllers
         }
 
         [HttpGet("results")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<ActionResult<List<ResultsDTO>>> GetResults()
         {
             var results = await _userService.GetResults();
             return Ok(results);
         }
+
+        [HttpGet("topFive")]
+        [Authorize]
+        public async Task<ActionResult<List<ResultsDTO>>> GetTopFive()
+        {
+            var results = await _userService.GetTopFive();
+            return Ok(results);
+        }
+
+        [HttpGet("userResults/{pn}/{ps}")]
+        [Authorize]
+        public async Task<ActionResult<List<ResultsDTO>>> UserResults(int pn, int ps)
+        {
+            var email = GetUserFromContex();
+
+            var results = await _userService.UserResults(email, pn, ps);
+            return Ok(results);
+        }
+
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<int> GetCount()
+        {
+            var email = GetUserFromContex();
+
+            int count = await _userService.GetCount(email);
+            return count;
+        }
+
     }
 }

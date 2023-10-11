@@ -23,8 +23,14 @@ namespace QuizProject.Infrastructure.Repository
 
         public async Task ChangeAnswers(ICollection<Answer> answers)
         {
-            await _context.Answers.AddRangeAsync(answers);
-            await _context.SaveChangesAsync();
+            foreach (Answer answer in answers)
+            {
+                if(answer.Id == 0 )
+                {
+                    await _context.Answers.AddAsync(answer);
+                }
+            }
+                    await _context.SaveChangesAsync();
         }
 
         public async Task<int> ChangeQuestion(Question questionEntity)
@@ -49,12 +55,14 @@ namespace QuizProject.Infrastructure.Repository
             return question;
         }
 
-        public async Task<bool> DeleteAnswer(int id)
+        public async Task<bool>DeleteAnswers(List<int> ids)
         {
             try
             {
-                _context.Answers.Remove(new Answer { Id = id });
-                 await _context.SaveChangesAsync();
+                _context.Answers
+                    .RemoveRange(ids.Select(id => new Answer { Id = id }));
+                await _context
+                    .SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -62,6 +70,7 @@ namespace QuizProject.Infrastructure.Repository
                 _logger.LogError(ex.Message);
                 return false;
             }
+            
         }
 
         public async Task<bool> DeleteQuestion(int id)
@@ -83,10 +92,16 @@ namespace QuizProject.Infrastructure.Repository
             }
         }
 
-        public async Task<List<Question>> GetAllQuestions()
+        public async Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize)
         {
-            return await _context.Questions.Include(q => q.Answers)
+            int skip = (pageNumber - 1) * pageSize;
+            return await _context.Questions.Skip(skip).Take(pageSize).Include(q => q.Answers)
                 .ToListAsync();
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _context.Questions.CountAsync();
         }
     }
 }

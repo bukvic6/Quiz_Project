@@ -7,8 +7,9 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task ChangeAnswers(ICollection<Answer> answers);
         public Task<int> ChangeQuestion(Question questionEntity);
         public Task<Question> CreateQuestion(Question question);
-        Task<bool> DeleteAnswer(int id);
+        Task<bool> DeleteAnswers(List<int> answersToDelete);
         public Task<bool> DeleteQuestion(int id);
-        public Task<List<Question>> GetAllQuestions();
+        public Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize);
+        public Task<int> GetCount();
     }
 }

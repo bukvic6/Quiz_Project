@@ -4,10 +4,6 @@ import Results from "./pages/Results";
 
 const AppRoutes = [
   {
-    index: true,
-    element: <LoginPage />
-  },
-  {
     path: '/home',
     element: <HomePage/>
   },

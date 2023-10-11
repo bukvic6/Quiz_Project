@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
-import { Flex, Box, Spacer } from '@chakra-ui/react'
+import { Flex, Box } from '@chakra-ui/react'
 import { NavMenu } from './NavMenu';
 
 export class Layout extends Component {
@@ -10,7 +9,7 @@ export class Layout extends Component {
     return (
         <Flex  flexDirection='column'>
             <Box >
-                <NavMenu />
+                <NavMenu updateLoginStatus={this.props.updateLoginStatus} isLoggedIn={this.props.isLoggedIn} />
             </Box>
             <Box h = 'calc(100vh - 10vh)'  tag="main">
                   {this.props.children}               

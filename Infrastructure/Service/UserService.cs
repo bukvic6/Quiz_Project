@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using QuizProject.Domain.Model;
 using QuizProject.Domain.Model.ModelDTO;
+using QuizProject.Infrastructure.Repository;
 using QuizProject.Infrastructure.Repository.IRepository;
 using QuizProject.Infrastructure.Service.IService;
 using System.Collections.Generic;
@@ -60,6 +61,12 @@ namespace QuizProject.Infrastructure.Service
             }
         }
 
+        public async Task<int> GetCount(string email)
+        {
+            int count = await _userRepository.GetCount(email);
+            return count;
+        }
+
         public async Task<List<QuestionsForUserDTO>> GetQuestions()
         {
             var questions = await _userRepository.GetAllQuestions();
@@ -70,6 +77,20 @@ namespace QuizProject.Infrastructure.Service
         public async Task<List<ResultsDTO>> GetResults()
         {
             var results = await _userRepository.GetResults();
+            var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
+            return resultsDTO;
+        }
+
+        public async Task<List<ResultsDTO>> GetTopFive()
+        {
+            var results = await _userRepository.GetTopFive();
+            var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
+            return resultsDTO;
+        }
+
+        public async Task<List<ResultsDTO>> UserResults(string email, int pageNumber, int pageSize)
+        {
+            var results = await _userRepository.GetUserResults(email, pageNumber, pageSize);
             var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
             return resultsDTO;
         }
