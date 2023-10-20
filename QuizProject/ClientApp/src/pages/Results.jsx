@@ -3,6 +3,7 @@ import UserService from "../services/UserService";
 import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import AdminService from "../services/AdminService";
 
 
 
@@ -17,15 +18,24 @@ function Results() {
     const [rowCount, setRowCount] = useState(0);
     const total = Math.ceil(rowCount / pageSize)
 
-
-
-    const getCount = async () => {
+    const getCount = async (userRole) => {
         try {
-            const { data } = await UserService.getResultCount()
-            setRowCount(data)
-            console.log(data)
+            if (userRole === 'ADMIN') {
+                var results = 'results'
+                const { data } = await AdminService.getCount(results);
+                setRowCount(data);
+                console.log("ADMIN : GET RESLTS COUNT")
+
+                console.log(data);
+
+            } else if (userRole === 'USER'){
+                const { data } = await UserService.getResultCount();
+                setRowCount(data);
+                console.log("USER : GET RESLTS COUNT")
+                console.log(data);
+            }
         } catch {
-            console.error("Error getting idem count")
+            console.error("Error getting item count");
         }
     }
 
@@ -44,7 +54,7 @@ function Results() {
 
     const getResults = async () => {
         try {
-            const { data } = await UserService.getResults()
+            const { data } = await AdminService.getResults(pageNumber, pageSize)
             setResults(data);
             console.log(data)
         } catch (error) {
@@ -73,19 +83,22 @@ function Results() {
     }
 
     useEffect(() => {
-        getCount();
         const userDataJSON = localStorage.getItem('token');
         if (!userDataJSON) {
             navigate('/');
             return;
         }
         const userData = JSON.parse(userDataJSON);
-        const userRole = userData.role; 
+        const userRole = userData.role;
+        console.log(userRole)
         setRole(userRole);
+        getCount(userRole);
         getResults();
         getTopFive();
         getUserResults();
+        getResults();
     }, [navigate, pageNumber])
+
     return (
         <Box>
             <Center>

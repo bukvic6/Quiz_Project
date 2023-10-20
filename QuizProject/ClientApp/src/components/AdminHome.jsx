@@ -56,9 +56,11 @@ function AdminHome() {
             console.error("Error fetching data")
         }
     };
+
     const getCount = async () => {
         try {
-            const { data } = await AdminService.getCount();
+            var questions = 'questions';
+            const { data } = await AdminService.getCount(questions);
             setRowCount(data)
         }
         catch {

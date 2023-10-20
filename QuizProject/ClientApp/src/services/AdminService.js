@@ -19,8 +19,11 @@ class AdminService {
     updateQuestion(question) {
         return api.post(ADMIN_API + "/updateQuestion", question)
     }
-    getCount() {
-        return api.get(ADMIN_API + "/count")
+    getCount(target) {
+        return api.get(`${ADMIN_API}/count/${target}`)
+    }
+    getResults(pn, ps) {
+        return api.get(`${ADMIN_API}/results/${pn}/${ps}`)
     }
 }
 export default new AdminService()

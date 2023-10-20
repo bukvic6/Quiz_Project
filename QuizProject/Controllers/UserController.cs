@@ -46,14 +46,6 @@ namespace QuizProject.Controllers
             return Ok(questions);
         }
 
-        [HttpGet("results")]
-        [Authorize]
-        public async Task<ActionResult<List<ResultsDTO>>> GetResults()
-        {
-            var results = await _userService.GetResults();
-            return Ok(results);
-        }
-
         [HttpGet("topFive")]
         [Authorize]
         public async Task<ActionResult<List<ResultsDTO>>> GetTopFive()

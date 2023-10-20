@@ -74,13 +74,6 @@ namespace QuizProject.Infrastructure.Service
             return questionListDTO;
         }
 
-        public async Task<List<ResultsDTO>> GetResults()
-        {
-            var results = await _userRepository.GetResults();
-            var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
-            return resultsDTO;
-        }
-
         public async Task<List<ResultsDTO>> GetTopFive()
         {
             var results = await _userRepository.GetTopFive();

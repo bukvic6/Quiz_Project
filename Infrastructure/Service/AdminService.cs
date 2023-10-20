@@ -49,10 +49,28 @@ namespace QuizProject.Infrastructure.Service
             var questionListDTO = _mapper.Map<List<QuestionDTO>>(questions);
             return questionListDTO;
         }
-
-        public async Task<int> GetCount()
+        public async Task<List<ResultsDTO>> GetResults(int pageNumber, int pageSize)
         {
-            int count = await _adminRepository.GetCount();
+            var results = await _adminRepository.GetResults(pageNumber, pageSize);
+            var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
+            return resultsDTO;
+        }
+
+        public async Task<int> GetCount(string target)
+        {
+            int count;
+            if (target == "results")
+            {
+                count = await _adminRepository.GetResultsCount();
+            }
+            else if (target == "questions")
+            {
+                count = await _adminRepository.GetQuestionCount();
+            }
+            else
+            {
+                count = 0;
+            }
             return count;
         }
 

@@ -10,9 +10,6 @@ class UserService {
     answerQuestion(answer) {
         return api.post(USER_API + "/calculate-score", answer)
     }
-    getResults() {
-        return api.get(USER_API + "/results")
-    }
     getTopFive() {
         return api.get(USER_API + "/topFive")
     }

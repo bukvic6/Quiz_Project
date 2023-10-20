@@ -5,6 +5,7 @@ using QuizProject.Infrastructure.Service.IService;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using QuizProject.Infrastructure.Service;
 
 namespace QuizProject.Controllers
 {
@@ -63,6 +64,14 @@ namespace QuizProject.Controllers
             return Ok(questions);
         }
 
+        [HttpGet("results/{pn}/{ps}")]
+        [Authorize]
+        public async Task<ActionResult<List<ResultsDTO>>> GetResults(int pn, int ps)
+        {
+            var results = await _adminService.GetResults(pn, ps);
+            return Ok(results);
+        }
+
         [HttpDelete("delete/{id}")]
         [Authorize]
         public async Task<ActionResult> Delete(int id)
@@ -77,11 +86,11 @@ namespace QuizProject.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpGet("count")]
+        [HttpGet("count/{target}")]
         [Authorize]
-        public async Task<int> GetCount()
+        public async Task<int> GetCount(string target)
         {
-            int count = await _adminService.GetCount();
+            int count = await _adminService.GetCount(target);
             return count;
         }
     }

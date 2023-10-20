@@ -42,14 +42,6 @@ namespace QuizProject.Infrastructure.Repository
             return count;
         }
 
-        public async Task<List<QuizResults>> GetResults()
-        {
-            var results = await _context.QuizzResults
-                .Include(b => b.User)
-                .ToListAsync();
-            return results;
-        }
-
         public async Task<List<QuizResults>> GetTopFive()
         {
             var results = await _context.QuizzResults

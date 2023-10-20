@@ -92,16 +92,42 @@ namespace QuizProject.Infrastructure.Repository
             }
         }
 
+        public async Task<List<QuizResults>> GetResults(int pageNumber, int pageSize)
+        {
+            int skip = (pageNumber - 1) * pageSize;
+
+            var results = await _context.QuizzResults
+                .Skip(skip)
+                .Take(pageSize)
+                .Include(b => b.User)
+                .ToListAsync();
+            return results;
+        }
+
         public async Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize)
         {
             int skip = (pageNumber - 1) * pageSize;
-            return await _context.Questions.Skip(skip).Take(pageSize).Include(q => q.Answers)
+            return await _context.Questions
+                .Skip(skip)
+                .Take(pageSize)
+                .Include(q => q.Answers)
                 .ToListAsync();
         }
 
-        public async Task<int> GetCount()
+        public async Task<int> GetQuestionCount()
         {
-            return await _context.Questions.CountAsync();
+
+            return await _context.Questions
+                .CountAsync();
+
+        }
+
+        public async Task<int> GetResultsCount()
+        {
+
+            return await _context.QuizzResults
+                .CountAsync();
+
         }
     }
 }
