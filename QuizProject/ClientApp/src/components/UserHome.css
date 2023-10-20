@@ -1,0 +1,24 @@
+﻿.popup-content {
+    margin: auto;
+    background: rgb(255, 255, 255);
+    padding: 150px;
+    border-radius: 50%;
+    border: 15px solid purple;
+}
+
+.popup-arrow {
+    color: rgb(255, 255, 255);
+}
+
+[role='tooltip'].popup-content {
+    width: 100px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+}
+
+.popup-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+[data-popup='tooltip'].popup-overlay {
+    background: transparent;
+}

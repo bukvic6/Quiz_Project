@@ -23,18 +23,12 @@ namespace QuizProject.Controllers
 
         [HttpPost("calculate-score")]
         [Authorize]
-        public async Task<ActionResult> CalculateScore(List<UserAnswer> answer)
+        public async Task<int> CalculateScore(List<UserAnswer> answer)
         {
             var email = GetUserFromContex();
-            if (email == null)
-                return BadRequest();
-
-            bool result = await _userService.CalculateScore(answer, email);
-            if (!result)
-                return BadRequest();
-
+            int result = await _userService.CalculateScore(answer, email);
             _logger.LogInformation("User with " + email + " email finished quiz");
-            return Ok();
+            return result;
         }
 
         [HttpGet]
@@ -46,11 +40,11 @@ namespace QuizProject.Controllers
             return Ok(questions);
         }
 
-        [HttpGet("topFive")]
+        [HttpGet("topResults/{topNumber}")]
         [Authorize]
-        public async Task<ActionResult<List<ResultsDTO>>> GetTopFive()
+        public async Task<ActionResult<List<ResultsDTO>>> GetTopResults(int topNumber)
         {
-            var results = await _userService.GetTopFive();
+            var results = await _userService.GetTopResults(topNumber);
             return Ok(results);
         }
 

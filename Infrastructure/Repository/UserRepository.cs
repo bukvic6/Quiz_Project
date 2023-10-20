@@ -42,12 +42,12 @@ namespace QuizProject.Infrastructure.Repository
             return count;
         }
 
-        public async Task<List<QuizResults>> GetTopFive()
+        public async Task<List<QuizResults>> GetTopResults(int topNumber)
         {
             var results = await _context.QuizzResults
                 .OrderBy(e => e.Points)
                 .OrderByDescending(e => e.Points)
-                .Take(5)
+                .Take(topNumber)
                 .Include(b => b.User)
                 .ToListAsync();
             return results;

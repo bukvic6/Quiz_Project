@@ -25,10 +25,11 @@ namespace QuizProject.Infrastructure.Service
 
         }
 
-        public async Task<bool> CalculateScore(List<UserAnswer> answer, string email)
+        public async Task<int> CalculateScore(List<UserAnswer> answer, string email)
         {
             int calculateScore = 0;
             var questions = await _userRepository.GetAllQuestions();
+            int questionLenght = questions.Count;
 
             foreach (var userAnswer in answer)
             {
@@ -44,20 +45,24 @@ namespace QuizProject.Infrastructure.Service
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
+            int percentage = (int)Math.Round((double)(100 * calculateScore) / questionLenght);
+
             try
             {
                 var user = await _userRepository.GetUserByUsername(email);
-                QuizResults quizzResults = new QuizResults { User = user, Points = calculateScore };
+                var timeNow = DateTime.Now;
+                string rating = calculateScore + " / " + questionLenght;
+                QuizResults quizzResults = new QuizResults { User = user, Points = calculateScore,Date = timeNow,Rating = rating,Percentage = percentage};
                 await _userRepository.AddToResults(quizzResults);
-                return true;
+                return percentage;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
-                return false;
+                return 0;
             }
         }
 
@@ -74,9 +79,9 @@ namespace QuizProject.Infrastructure.Service
             return questionListDTO;
         }
 
-        public async Task<List<ResultsDTO>> GetTopFive()
+        public async Task<List<ResultsDTO>> GetTopResults(int topNumber)
         {
-            var results = await _userRepository.GetTopFive();
+            var results = await _userRepository.GetTopResults(topNumber);
             var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
             return resultsDTO;
         }

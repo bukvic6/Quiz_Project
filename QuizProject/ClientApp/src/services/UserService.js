@@ -10,8 +10,8 @@ class UserService {
     answerQuestion(answer) {
         return api.post(USER_API + "/calculate-score", answer)
     }
-    getTopFive() {
-        return api.get(USER_API + "/topFive")
+    getTopFive(topNumber) {
+        return api.get(`${USER_API}/topResults/${topNumber}`)
     }
     getUserResults(pn, ps) {
         return api.get(`${USER_API}/userResults/${pn}/${ps}`)

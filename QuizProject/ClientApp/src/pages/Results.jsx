@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
+import moment from "moment";
 import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
@@ -11,9 +12,10 @@ function Results() {
     const [role, setRole] = useState('');
     const navigate = useNavigate();
     const [results, setResults] = useState([]);
-    const [topFive, setTopFive] = useState([]);
+    const [topResults, setTopResults] = useState([]);
     const [userResults, setUserResult] = useState([])
     const pageSize = 3;
+    const topNumber = 4;
     const [pageNumber, setPageNumber] = useState(1);
     const [rowCount, setRowCount] = useState(0);
     const total = Math.ceil(rowCount / pageSize)
@@ -24,14 +26,11 @@ function Results() {
                 var results = 'results'
                 const { data } = await AdminService.getCount(results);
                 setRowCount(data);
-                console.log("ADMIN : GET RESLTS COUNT")
-
                 console.log(data);
 
             } else if (userRole === 'USER'){
                 const { data } = await UserService.getResultCount();
                 setRowCount(data);
-                console.log("USER : GET RESLTS COUNT")
                 console.log(data);
             }
         } catch {
@@ -62,10 +61,10 @@ function Results() {
         }           
     }
 
-    const getTopFive = async () => {
+    const getTopResults = async () => {
         try {
-            const { data } = await UserService.getTopFive()
-            setTopFive(data);
+            const { data } = await UserService.getTopFive(topNumber)
+            setTopResults(data);
             console.log(data)
         } catch (error) {
             console.log(error)
@@ -81,6 +80,10 @@ function Results() {
             console.log(error)
         }
     }
+    function formatDate(date) {
+        var formattedDate = moment(date).format('D.M.YYYY HH:mm');
+        return formattedDate
+    }
 
     useEffect(() => {
         const userDataJSON = localStorage.getItem('token');
@@ -94,7 +97,7 @@ function Results() {
         setRole(userRole);
         getCount(userRole);
         getResults();
-        getTopFive();
+        getTopResults();
         getUserResults();
         getResults();
     }, [navigate, pageNumber])
@@ -120,12 +123,15 @@ function Results() {
                                 {role === 'ADMIN' ? (
                                     <><CardHeader>
                                     <Heading size='md'>All results</Heading>
-                                    </CardHeader><TableContainer w='400px'>
+                                    </CardHeader><TableContainer>
                                             <Table variant='striped' colorScheme='gray'>
                                                 <Thead>
                                                     <Tr>
                                                         <Th>Username</Th>
                                                         <Th>Points</Th>
+                                                        <Th>Date</Th>
+                                                        <Th>Rating</Th>
+                                                        <Th>Percentage</Th>
 
                                                     </Tr>
                                                 </Thead>
@@ -135,6 +141,10 @@ function Results() {
                                                             <Tr key={key}>
                                                                 <Td>{val.user}</Td>
                                                                 <Td>{val.points}</Td>
+                                                                <Td>{formatDate(val.date)}</Td>
+                                                                <Td>{val.rating}</Td>
+                                                                <Td>{val.percentage}</Td>
+
                                                             </Tr>
                                                         );
                                                     })}
@@ -145,13 +155,15 @@ function Results() {
                                 ) : role === 'USER' ? (
                                         <><CardHeader>
                                          <Heading size='md'> My results</Heading>
-                                        </CardHeader><TableContainer w='400px'>
+                                        </CardHeader><TableContainer w='700px'>
                                                 <Table variant='striped' colorScheme='gray'>
                                                     <Thead>
                                                         <Tr>
                                                             <Th>Username</Th>
                                                             <Th>Points</Th>
-
+                                                            <Th>Date</Th>
+                                                            <Th>Rating</Th>
+                                                            <Th>Percentage</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -160,6 +172,9 @@ function Results() {
                                                                 <Tr key={key}>
                                                                     <Td>{val.user}</Td>
                                                                     <Td>{val.points}</Td>
+                                                                    <Td>{formatDate(val.date)}</Td>
+                                                                    <Td>{val.rating}</Td>
+                                                                    <Td>{val.percentage} %</Td>
                                                                 </Tr>
                                                             );
                                                         })}
@@ -172,24 +187,29 @@ function Results() {
                         </Card>
                         <Card align='center'>
                             <CardHeader>
-                                <Heading size='md'>TOP 5</Heading>
+                                <Heading size='md'>TOP {topNumber}</Heading>
                             </CardHeader>
                             <CardBody>
-                            <TableContainer w='400px'>
+                            <TableContainer >
                                 <Table variant='striped' colorScheme='blue'>
                                     <Thead>
                                         <Tr>
                                             <Th>Username</Th>
-                                            <Th>Points</Th>
-
+                                                <Th>Points</Th>
+                                                <Th>Date</Th>
+                                                <Th>Rating</Th>
+                                                <Th>Percentage</Th>
                                         </Tr>
                                     </Thead>
                                         <Tbody>
-                                            {topFive.map((val, key) => {
+                                            {topResults.map((val, key) => {
                                             return (
                                                 <Tr key={key} >
                                                     <Td>{val.user}</Td>
                                                     <Td>{val.points}</Td>
+                                                    <Td>{formatDate(val.date)}</Td>
+                                                    <Td>{val.rating}</Td>
+                                                    <Td>{val.percentage} %</Td>
                                                 </Tr>
                                             )
                                         })}

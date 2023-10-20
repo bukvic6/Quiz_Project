@@ -1,5 +1,7 @@
 ﻿using QuizProject.Domain.Model;
+using System.Collections.Generic;
 using System.Security.Cryptography;
+
 
 namespace QuizProject.Domain.Data.DbInitializer
 {
@@ -7,10 +9,12 @@ namespace QuizProject.Domain.Data.DbInitializer
     {
         private readonly ApplicationDbContext _context;
 
+
         public DbInitializer(ApplicationDbContext context)
         {
             _context = context;
         }
+
 
         public void Initialize()
         {
@@ -23,12 +27,21 @@ namespace QuizProject.Domain.Data.DbInitializer
 
             var salt = RandomNumberGenerator.GetBytes(128 / 8);
             var hash = Rfc2898DeriveBytes.Pbkdf2("Admin123", salt, 10000, HashAlgorithmName.SHA256, 256 / 8);
-            var saltUser = RandomNumberGenerator.GetBytes(128 / 8);
-            var hashUser = Rfc2898DeriveBytes.Pbkdf2("User123", saltUser, 10000, HashAlgorithmName.SHA256, 256 / 8);
+            var saltMarko = RandomNumberGenerator.GetBytes(128 / 8);
+            var hashMarko = Rfc2898DeriveBytes.Pbkdf2("Marko123", saltMarko, 10000, HashAlgorithmName.SHA256, 256 / 8);
+            var saltPera = RandomNumberGenerator.GetBytes(128 / 8);
+            var hashPera = Rfc2898DeriveBytes.Pbkdf2("Pera123", saltPera, 10000, HashAlgorithmName.SHA256, 256 / 8);
+            var saltZika = RandomNumberGenerator.GetBytes(128 / 8);
+            var hashZika = Rfc2898DeriveBytes.Pbkdf2("Zika123", saltZika, 10000, HashAlgorithmName.SHA256, 256 / 8);
+            var saltMiki = RandomNumberGenerator.GetBytes(128 / 8);
+            var hashMiki = Rfc2898DeriveBytes.Pbkdf2("Miki123", saltZika, 10000, HashAlgorithmName.SHA256, 256 / 8);
             var users = new User[]
             {
                 new User{ Name = "Admin", Email = "admin@gmail.com", Password = Convert.ToBase64String(hash),PasswordSalt = Convert.ToBase64String(salt), Role = Role.ADMIN},
-                new User{ Name = "User", Email = "user@gmail.com", Password = Convert.ToBase64String(hashUser),PasswordSalt = Convert.ToBase64String(saltUser), Role = Role.USER}
+                new User{ Name = "Marko", Email = "marko@gmail.com", Password = Convert.ToBase64String(hashMarko),PasswordSalt = Convert.ToBase64String(saltMarko), Role = Role.USER},
+                new User{ Name = "Pera", Email = "pera@gmail.com", Password = Convert.ToBase64String(hashPera),PasswordSalt = Convert.ToBase64String(saltPera), Role = Role.USER},
+                new User{ Name = "Zika", Email = "zika@gmail.com", Password = Convert.ToBase64String(hashZika),PasswordSalt = Convert.ToBase64String(saltZika), Role = Role.USER},
+                new User{ Name = "Miki", Email = "miki@gmail.com", Password = Convert.ToBase64String(hashMiki),PasswordSalt = Convert.ToBase64String(saltMiki), Role = Role.USER}
             };
             foreach (User user in users)
             {
