@@ -65,7 +65,7 @@ namespace QuizProject.Domain.Data.DbInitializer
                 new Answer{QuestionId = 1, AnswerText = "4"},
                 new Answer{QuestionId = 1, AnswerText = "5"},
                 new Answer{QuestionId = 1, AnswerText = "7"},
-                    
+
                 new Answer{QuestionId = 2,AnswerText = "3"},
                 new Answer{QuestionId = 2, AnswerText = "7"},
                 new Answer{QuestionId = 2,AnswerText = "5"},

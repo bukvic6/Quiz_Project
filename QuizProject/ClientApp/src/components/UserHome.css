@@ -1,9 +1,13 @@
 ﻿.popup-content {
-    margin: auto;
+    margin: 0 auto;
     background: rgb(255, 255, 255);
-    padding: 150px;
+    width: 400px;
     border-radius: 50%;
-    border: 15px solid purple;
+    text-align: center;
+    border: 15px;
+    padding: 70px;
+    border-style: solid;
+    border-color: #9A4444;
 }
 
 .popup-arrow {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from '../../node_modules/react-router-dom/index';
 import AdminHome from '../components/AdminHome';
 import UserHome from '../components/UserHome';
-import LoginPage from './LoginPage';
 
 function HomePage() {
     const [role, setRole] = useState('');

@@ -1,12 +1,11 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
 import moment from "moment";
-import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
+import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, CardFooter, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import AdminService from "../services/AdminService";
-
-
+import { FaTrophy } from 'react-icons/fa';
 
 function Results() {
     const [role, setRole] = useState('');
@@ -20,19 +19,10 @@ function Results() {
     const [rowCount, setRowCount] = useState(0);
     const total = Math.ceil(rowCount / pageSize)
 
-    const getCount = async (userRole) => {
+    const getCount = async () => {
         try {
-            if (userRole === 'ADMIN') {
-                var results = 'results'
-                const { data } = await AdminService.getCount(results);
-                setRowCount(data);
-                console.log(data);
-
-            } else if (userRole === 'USER'){
-                const { data } = await UserService.getResultCount();
-                setRowCount(data);
-                console.log(data);
-            }
+            const { data } = await UserService.getResultCount();
+            setRowCount(data);
         } catch {
             console.error("Error getting item count");
         }
@@ -95,7 +85,7 @@ function Results() {
         const userRole = userData.role;
         console.log(userRole)
         setRole(userRole);
-        getCount(userRole);
+        getCount();
         getResults();
         getTopResults();
         getUserResults();
@@ -108,22 +98,23 @@ function Results() {
                 <Flex flexDirection='column'>
                     <Box position='relative' padding='10'>
                         <Divider />
-                        <AbsoluteCenter bg='white' px='6'>
+                        <AbsoluteCenter bg='white' fontSize='xl' px='6'>
                             Quiz results
                         </AbsoluteCenter>
                     </Box>
                     <Flex flexDirection='row' gap={10} >
                         <Card align='center'>
+                                <CardHeader>
+                                    {role === 'ADMIN' ? (
+                                            <Heading size='md'>All results</Heading>
+                                    ) : role === 'USER' ? (
+                                            <Heading size='md'>My Results</Heading>
+
+                                    ) : null}
+                                </CardHeader>
                             <CardBody>
-                                <ButtonGroup gap='2'>
-                                    <Input placeholder='Search' />
-                                    <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon />} />
-                                    <IconButton onClick={handleNextPage} icon={<ArrowForwardIcon />} />
-                                </ButtonGroup>
                                 {role === 'ADMIN' ? (
-                                    <><CardHeader>
-                                    <Heading size='md'>All results</Heading>
-                                    </CardHeader><TableContainer>
+                                    <><TableContainer>
                                             <Table variant='striped' colorScheme='gray'>
                                                 <Thead>
                                                     <Tr>
@@ -153,9 +144,7 @@ function Results() {
                                         </TableContainer></>
 
                                 ) : role === 'USER' ? (
-                                        <><CardHeader>
-                                         <Heading size='md'> My results</Heading>
-                                        </CardHeader><TableContainer w='700px'>
+                                        <><TableContainer w='700px'>
                                                 <Table variant='striped' colorScheme='gray'>
                                                     <Thead>
                                                         <Tr>
@@ -180,27 +169,33 @@ function Results() {
                                                         })}
                                                     </Tbody>
                                                 </Table>
-                                            </TableContainer></>
+                                           </TableContainer></>
 
                                 ) : null} 
                             </CardBody>
+                            <CardFooter align='end'>
+                                <ButtonGroup gap='2'>
+                                    {pageNumber > 1 && <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon />} />}
+                                    {pageNumber < total && <IconButton onClick={handleNextPage} icon={<ArrowForwardIcon />} />}                         
+                                </ButtonGroup>
+                            </CardFooter>
                         </Card>
                         <Card align='center'>
                             <CardHeader>
                                 <Heading size='md'>TOP {topNumber}</Heading>
                             </CardHeader>
                             <CardBody>
-                            <TableContainer >
-                                <Table variant='striped' colorScheme='blue'>
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Username</Th>
-                                                <Th>Points</Th>
-                                                <Th>Date</Th>
-                                                <Th>Rating</Th>
-                                                <Th>Percentage</Th>
-                                        </Tr>
-                                    </Thead>
+                                <TableContainer >
+                                    <Table variant='striped' colorScheme='orange'>
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Username</Th>
+                                                    <Th>Points</Th>
+                                                    <Th>Date</Th>
+                                                    <Th>Rating</Th>
+                                                    <Th>Percentage</Th>
+                                            </Tr>
+                                        </Thead>
                                         <Tbody>
                                             {topResults.map((val, key) => {
                                             return (
@@ -210,12 +205,13 @@ function Results() {
                                                     <Td>{formatDate(val.date)}</Td>
                                                     <Td>{val.rating}</Td>
                                                     <Td>{val.percentage} %</Td>
+                                                    <Td><FaTrophy color='#c9a132' /></Td>
                                                 </Tr>
                                             )
-                                        })}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
+                                            })}
+                                        </Tbody>
+                                    </Table>
+                                </TableContainer>
                             </CardBody>
                         </Card>
                     </Flex>

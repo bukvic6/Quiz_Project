@@ -62,9 +62,10 @@ namespace QuizProject.Controllers
         [Authorize]
         public async Task<int> GetCount()
         {
+            var role = GetUserRole();
             var email = GetUserFromContex();
 
-            int count = await _userService.GetCount(email);
+            int count = await _userService.GetCount(email, role);
             return count;
         }
 

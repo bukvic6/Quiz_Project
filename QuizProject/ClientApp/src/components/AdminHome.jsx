@@ -28,6 +28,10 @@ import {
     Spacer,
     IconButton,
     ButtonGroup,
+    CardHeader,
+    Card,
+    CardBody,
+    CardFooter
 } from "@chakra-ui/react";
 import { DeleteIcon, ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 
@@ -59,8 +63,7 @@ function AdminHome() {
 
     const getCount = async () => {
         try {
-            var questions = 'questions';
-            const { data } = await AdminService.getCount(questions);
+            const { data } = await AdminService.getCount();
             setRowCount(data)
         }
         catch {
@@ -69,16 +72,19 @@ function AdminHome() {
     }
 
     const deleteAnswer = async () => {
-        console.log(answerToDelete);
         await AdminService.deleteAnswer(answerToDelete);
     }
 
     function addAnswerToList() {
         if (isEditing === true) {
             const ans = {
+                id: nanoid(),
                 answerText: value,
             }
             setAnswer([...answers, ans]);
+            console.log(ans.id);
+            setAnswerList([...answerList, ans]);
+            console.log(answers);
             setValue("")
         }
         else {
@@ -90,7 +96,7 @@ function AdminHome() {
             setAnswerList([...answerList, ans]);
             setValue("");
         }
-        
+
     }
 
     const handlePreviousPage = () => {
@@ -108,13 +114,23 @@ function AdminHome() {
 
     function deleteFromAnswerList(id) {
         if (isEditing === true) {
-            setAnswerToDelete([answerToDelete.push(id)])
-            const newList = answers.filter((item) => {
-                return item.id !== id
-            })
-            setAnswer(newList);
+            if (typeof id === "string") {
+                const newList = answers.filter((item) => {
+                    return item.id !== id
+                })
+                setAnswer(newList);
+            }
+            else {
+                console.log(id);
+                setAnswerToDelete([...answerToDelete, id])
+                const newList = answers.filter((item) => {
+                    return item.id !== id
+                })
+                console.log(answerToDelete);
+                setAnswer(newList);
+            }
+            console.log(answers)
         } else {
-
             const newList = answerList.filter((item) => {
                 return item.id !== id
             })
@@ -149,10 +165,13 @@ function AdminHome() {
     const changeQuestion = async (e) => {
         e.preventDefault();
         setPopoupOpen(false);
+        let newAnswerList = answers.filter(x => typeof x.id === "string").map((item) => {
+            return { answerText: item.answerText }
+        })
         const questions = {
             id: questionId,
             questionText: question,
-            answers: answers,
+            answers: newAnswerList,
             rightAnswer: solution,
         };
         try {
@@ -192,7 +211,7 @@ function AdminHome() {
                 <Flex flexDirection="column">
                     {
                         <Popup
-                            className="popup-content"
+                            class="popup-content-ADMIN"
                             open={isPopupOpen}
                             closeOnDocumentClick={false}
                             onClose={() => {
@@ -300,72 +319,80 @@ function AdminHome() {
                             )}
                         </Popup>
                     }
-                    <Box position="relative" padding="10">
+                    <Box position="relative" fontSize='xl' padding="10">
                         <Divider />
                         <AbsoluteCenter bg="white" px="4">
                             Question list
                         </AbsoluteCenter>
                     </Box>
-                    <Flex>
-                        <Box p='4'>
-                            <Button
-                                colorScheme="blue"
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setPopoupOpen(true);
-                                }}>
-                                Add new question
-                            </Button>
-                        </Box>
-                        <Spacer/>
-                        <ButtonGroup gap='2'>
-                            <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon/>}/>
-                            <IconButton onClick={handleNextPage} icon={ <ArrowForwardIcon/> }/ >
-                        </ButtonGroup>
-                    </Flex>
-                    <TableContainer w="70vw">
-                        <Table variant="striped" colorScheme="blackAlpha">
-                            <Thead>
-                                <Tr>
-                                    <Th>Question</Th>
-                                    <Th>Answers</Th>
-                                    <Th>Solution</Th>
-                                    <Th>Delete/Update</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {questions.map((val, key) => {
-                                    return (
-                                        <Tr key={key}>
-                                            <Td>{val.questionText}</Td>
-                                            <Td>
-                                                {val.answers.map((item) => item.answerText).join(", ")}
-                                            </Td>
-                                            <Td>{val.rightAnswer}</Td>
-                                            <Td>
-                                                <Stack direction="row" spacing={4}>
-                                                    <Button
-                                                        colorScheme="red"
-                                                        size="md"
-                                                        onClick={() => handleDelete(val.id)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                    <Button
-                                                        colorScheme="blue"
-                                                        size="md"
-                                                        onClick={() => handleUpdateClick(val)}
-                                                    >
-                                                        Update
-                                                    </Button>
-                                                </Stack>
-                                            </Td>
+                    <Card>
+                        <CardHeader>
+                            <Flex>
+                                <Box p='4'>
+                                    <Button
+                                        colorScheme="blue"
+                                        onClick={() => {
+                                            setIsEditing(false);
+                                            setPopoupOpen(true);
+                                        }}>
+                                        Add new question
+                                    </Button>
+                                </Box>
+                                <Spacer />
+                            </Flex>
+                        </CardHeader>
+                        <CardBody>
+                            <TableContainer w="70vw">
+                                <Table variant="striped" colorScheme="blackAlpha">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Question</Th>
+                                            <Th>Answers</Th>
+                                            <Th>Solution</Th>
+                                            <Th>Delete/Update</Th>
                                         </Tr>
-                                    );
-                                })}
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
+                                    </Thead>
+                                    <Tbody>
+                                        {questions.map((val, key) => {
+                                            return (
+                                                <Tr key={key}>
+                                                    <Td>{val.questionText}</Td>
+                                                    <Td>
+                                                        {val.answers.map((item) => item.answerText).join(", ")}
+                                                    </Td>
+                                                    <Td>{val.rightAnswer}</Td>
+                                                    <Td>
+                                                        <Stack direction="row" spacing={4}>
+                                                            <Button
+                                                                colorScheme="red"
+                                                                size="md"
+                                                                onClick={() => handleDelete(val.id)}
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                            <Button
+                                                                colorScheme="blue"
+                                                                size="md"
+                                                                onClick={() => handleUpdateClick(val)}
+                                                            >
+                                                                Update
+                                                            </Button>
+                                                        </Stack>
+                                                    </Td>
+                                                </Tr>
+                                            );
+                                        })}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </CardBody>
+                        <CardFooter>
+                            <ButtonGroup gap='2'>
+                                {pageNumber > 1 && <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon />} />}
+                                {pageNumber < total && <IconButton onClick={handleNextPage} icon={<ArrowForwardIcon />} />}
+                            </ButtonGroup>
+                        </CardFooter>
+                    </Card>
                 </Flex>
             </Center>
         </Box>

@@ -45,7 +45,7 @@ namespace QuizProject.Infrastructure.Service
 
         public async Task<List<QuestionDTO>> GetQuestions(int pageNumber, int pageSize)
         {
-            var questions = await _adminRepository.GetAllQuestions(pageNumber,pageSize);
+            var questions = await _adminRepository.GetAllQuestions(pageNumber, pageSize);
             var questionListDTO = _mapper.Map<List<QuestionDTO>>(questions);
             return questionListDTO;
         }
@@ -56,21 +56,9 @@ namespace QuizProject.Infrastructure.Service
             return resultsDTO;
         }
 
-        public async Task<int> GetCount(string target)
+        public async Task<int> GetCount()
         {
-            int count;
-            if (target == "results")
-            {
-                count = await _adminRepository.GetResultsCount();
-            }
-            else if (target == "questions")
-            {
-                count = await _adminRepository.GetQuestionCount();
-            }
-            else
-            {
-                count = 0;
-            }
+            int count = await _adminRepository.GetQuestionCount();
             return count;
         }
 

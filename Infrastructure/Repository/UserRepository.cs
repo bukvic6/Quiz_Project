@@ -74,5 +74,11 @@ namespace QuizProject.Infrastructure.Repository
                 .ToListAsync();
             return userResult;
         }
+
+        public async Task<int> GetResultsCount()
+        {
+            return await _context.QuizzResults
+                .CountAsync();
+        }
     }
 }

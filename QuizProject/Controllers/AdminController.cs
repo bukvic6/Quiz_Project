@@ -86,11 +86,11 @@ namespace QuizProject.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpGet("count/{target}")]
+        [HttpGet("count")]
         [Authorize]
-        public async Task<int> GetCount(string target)
+        public async Task<int> GetCount()
         {
-            int count = await _adminService.GetCount(target);
+            int count = await _adminService.GetCount();
             return count;
         }
     }

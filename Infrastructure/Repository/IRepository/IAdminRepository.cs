@@ -11,7 +11,6 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task<bool> DeleteQuestion(int id);
         public Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize);
         public Task<int> GetQuestionCount();
-        public Task<int> GetResultsCount();
         public Task<List<QuizResults>> GetResults(int pn, int ps);
 
     }

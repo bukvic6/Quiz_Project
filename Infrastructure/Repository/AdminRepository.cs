@@ -25,12 +25,12 @@ namespace QuizProject.Infrastructure.Repository
         {
             foreach (Answer answer in answers)
             {
-                if(answer.Id == 0 )
+                if (answer.Id == 0)
                 {
                     await _context.Answers.AddAsync(answer);
                 }
             }
-                    await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<int> ChangeQuestion(Question questionEntity)
@@ -55,7 +55,7 @@ namespace QuizProject.Infrastructure.Repository
             return question;
         }
 
-        public async Task<bool>DeleteAnswers(List<int> ids)
+        public async Task<bool> DeleteAnswers(List<int> ids)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace QuizProject.Infrastructure.Repository
                 _logger.LogError(ex.Message);
                 return false;
             }
-            
+
         }
 
         public async Task<bool> DeleteQuestion(int id)
@@ -116,18 +116,8 @@ namespace QuizProject.Infrastructure.Repository
 
         public async Task<int> GetQuestionCount()
         {
-
             return await _context.Questions
                 .CountAsync();
-
-        }
-
-        public async Task<int> GetResultsCount()
-        {
-
-            return await _context.QuizzResults
-                .CountAsync();
-
         }
     }
 }

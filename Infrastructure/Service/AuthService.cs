@@ -1,15 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using QuizProject.Domain.Model.ModelDTO;
-using System.Security.Claims;
+﻿using QuizProject.Domain.Model.ModelDTO;
 using QuizProject.Infrastructure.Repository.IRepository;
 using QuizProject.Infrastructure.Service.IService;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using QuizProject.Domain.Model;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 
 namespace QuizProject.Infrastructure.Service
@@ -19,7 +10,6 @@ namespace QuizProject.Infrastructure.Service
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
         private readonly IJwtService _jwtService;
-
 
         public AuthService(IAuthRepository authRepository, IConfiguration configuration, IJwtService jwtService)
         {

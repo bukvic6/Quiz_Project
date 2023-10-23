@@ -8,7 +8,7 @@ namespace QuizProject.Infrastructure.Service.IService
         public Task<QuestionDTO> CreateQuestion(QuestionDTO question);
         public Task<bool> DeleteQuestion(int id);
         public Task<List<QuestionDTO>> GetQuestions(int pageNumber, int pageSize);
-        public Task<int> GetCount(string target);
+        public Task<int> GetCount();
         public Task<bool> DeleteAnswers(List<int> answersToDelete);
         public Task<List<ResultsDTO>> GetResults(int pn, int ps);
 

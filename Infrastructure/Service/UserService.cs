@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Logging;
 using QuizProject.Domain.Model;
 using QuizProject.Domain.Model.ModelDTO;
-using QuizProject.Infrastructure.Repository;
 using QuizProject.Infrastructure.Repository.IRepository;
 using QuizProject.Infrastructure.Service.IService;
-using System.Collections.Generic;
 
 namespace QuizProject.Infrastructure.Service
 {
@@ -55,7 +53,7 @@ namespace QuizProject.Infrastructure.Service
                 var user = await _userRepository.GetUserByUsername(email);
                 var timeNow = DateTime.Now;
                 string rating = calculateScore + " / " + questionLenght;
-                QuizResults quizzResults = new QuizResults { User = user, Points = calculateScore,Date = timeNow,Rating = rating,Percentage = percentage};
+                QuizResults quizzResults = new QuizResults { User = user, Points = calculateScore, Date = timeNow, Rating = rating, Percentage = percentage };
                 await _userRepository.AddToResults(quizzResults);
                 return percentage;
             }
@@ -66,9 +64,20 @@ namespace QuizProject.Infrastructure.Service
             }
         }
 
-        public async Task<int> GetCount(string email)
+        public async Task<int> GetCount(string email, string role)
         {
-            int count = await _userRepository.GetCount(email);
+            int count = 0;
+            if (role == "ADMIN")
+            {
+                count = await _userRepository.GetResultsCount();
+                return count;
+            }
+            else if (role == "USER")
+            {
+                count = await _userRepository.GetCount(email);
+                return count;
+            }
+
             return count;
         }
 
