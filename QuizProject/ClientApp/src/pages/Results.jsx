@@ -1,11 +1,11 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
 import moment from "moment";
-import { TableContainer, Table, Thead, Th, Tr, Td, Tbody, CardFooter, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
+import { TableContainer, Table, Image, CircularProgress,CircularProgressLabel,Thead, Th, Tr, Td, Tbody, CardFooter, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
-import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
 import AdminService from "../services/AdminService";
-import { FaTrophy } from 'react-icons/fa';
+import trophy from './../assets/trophy.png';
 
 function Results() {
     const [role, setRole] = useState('');
@@ -96,19 +96,38 @@ function Results() {
         <Box>
             <Center>
                 <Flex flexDirection='column'>
-                    <Box position='relative' padding='10'>
-                        <Divider />
-                        <AbsoluteCenter bg='white' fontSize='xl' px='6'>
-                            Quiz results
-                        </AbsoluteCenter>
-                    </Box>
-                    <Flex flexDirection='row' gap={10} >
+                    <Flex flexDirection='column' gap={10} >
+                        <Card align='center' w='70vw' bg='#1D3557' p='5px' borderWidth='3px' borderRadius='lg' boxShadow='2xl' rounded='md'>
+                            <CardHeader>
+                                <Heading color='#F1FAEE'>Our Winners</Heading>
+                            </CardHeader>
+                            <CardBody>
+                                <Flex gap={ 5 } flexDirection='row'>
+                                    {topResults.map((val, key) => {
+                                        return (
+                                            <Card borderWidth='3px' borderRadius='lg' w='200px' key={key} align='center'>
+
+                                                <Heading as='h4' size='md' color='#1D3557' >{val.user}</Heading>
+                                                <CardBody align='center' pb='10px'>
+                                                    <Image boxSize='3em'  src={trophy }></Image>
+                                                </CardBody>
+                                                <CardFooter>
+                                                    <CircularProgress size='50px' value={val.percentage} color='#A8DADC'>
+                                                        <CircularProgressLabel>{ val.percentage } %</CircularProgressLabel>
+                                                    </CircularProgress>                                                </CardFooter>
+                                            </Card>
+                                        )
+                                    })}
+
+                                </Flex>
+                            </CardBody>
+                        </Card>
                         <Card align='center'>
                                 <CardHeader>
                                     {role === 'ADMIN' ? (
-                                            <Heading size='md'>All results</Heading>
-                                    ) : role === 'USER' ? (
-                                            <Heading size='md'>My Results</Heading>
+                                    <Heading  size='md'>All results</Heading>
+                                ) : role === 'USER' ? (
+                                        <Heading as='h4' size='md' color='#1D3557'>My Results</Heading>
 
                                     ) : null}
                                 </CardHeader>
@@ -175,44 +194,18 @@ function Results() {
                             </CardBody>
                             <CardFooter align='end'>
                                 <ButtonGroup gap='2'>
-                                    {pageNumber > 1 && <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon />} />}
-                                    {pageNumber < total && <IconButton onClick={handleNextPage} icon={<ArrowForwardIcon />} />}                         
+                                    {pageNumber > 1 && <IconButton isRound={true} fontSize='20px' color='#F1FAEE' bg='#457B9D' _active={{
+                                        bg: '#dddfe2',
+                                        transform: 'scale(1.28)',
+                                        borderColor: '#F1FAEE',
+                                    }} _hover={{ bg: '#1D3557' }} onClick={handlePreviousPage} icon={<ArrowLeftIcon />} />}
+                                    {pageNumber < total && <IconButton isRound={true} color='#F1FAEE' bg='#457B9D' fontSize='20px' _active={{
+                                        bg: '#dddfe2',
+                                        transform: 'scale(1.28)',
+                                        borderColor: '#F1FAEE',
+                                    }} _hover={{ bg: '#1D3557' }} onClick={handleNextPage} icon={<ArrowRightIcon />} />}                           
                                 </ButtonGroup>
                             </CardFooter>
-                        </Card>
-                        <Card align='center'>
-                            <CardHeader>
-                                <Heading size='md'>TOP {topNumber}</Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <TableContainer >
-                                    <Table variant='striped' colorScheme='orange'>
-                                        <Thead>
-                                            <Tr>
-                                                <Th>Username</Th>
-                                                    <Th>Points</Th>
-                                                    <Th>Date</Th>
-                                                    <Th>Rating</Th>
-                                                    <Th>Percentage</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {topResults.map((val, key) => {
-                                            return (
-                                                <Tr key={key} >
-                                                    <Td>{val.user}</Td>
-                                                    <Td>{val.points}</Td>
-                                                    <Td>{formatDate(val.date)}</Td>
-                                                    <Td>{val.rating}</Td>
-                                                    <Td>{val.percentage} %</Td>
-                                                    <Td><FaTrophy color='#c9a132' /></Td>
-                                                </Tr>
-                                            )
-                                            })}
-                                        </Tbody>
-                                    </Table>
-                                </TableContainer>
-                            </CardBody>
                         </Card>
                     </Flex>
                 </Flex>

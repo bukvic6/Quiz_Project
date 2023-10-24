@@ -8,6 +8,7 @@ import {
     TableContainer,
     Table,
     Thead,
+    Textarea,
     Th,
     Tr,
     Td,
@@ -25,7 +26,6 @@ import {
     Divider,
     AbsoluteCenter,
     Stack,
-    Spacer,
     IconButton,
     ButtonGroup,
     CardHeader,
@@ -33,7 +33,8 @@ import {
     CardBody,
     CardFooter
 } from "@chakra-ui/react";
-import { DeleteIcon, ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon, DeleteIcon, AddIcon, ArrowRightIcon } from '@chakra-ui/icons'
+
 
 function AdminHome() {
     const [question, setQuestion] = useState("");
@@ -156,6 +157,7 @@ function AdminHome() {
             setAnswer([]);
             setSolution("");
             getQuestions();
+            setAnswerList([])
             getCount();
         } catch (error) {
             console.log(error);
@@ -177,6 +179,8 @@ function AdminHome() {
         try {
             await AdminService.updateQuestion(questions);
             deleteAnswer();
+            setAnswer([]);
+            setAnswerList([])
             getQuestions();
         } catch (error) {
             console.log(error);
@@ -235,7 +239,7 @@ function AdminHome() {
                                                     </Heading>
                                                 </Center>
                                                 <FormControl isRequired>
-                                                    <Input
+                                                    <Textarea 
                                                         variant="filled"
                                                         type="text"
                                                         value={question}
@@ -243,7 +247,7 @@ function AdminHome() {
                                                         placeholder="Enter question."
                                                         _placeholder={{ opacity: 1, color: "gray.600" }}
                                                         name="question"
-                                                    ></Input>
+                                                    ></Textarea >
                                                 </FormControl>
                                                 <VStack>
                                                     {isEditing ? (
@@ -252,7 +256,7 @@ function AdminHome() {
                                                                 <Flex w="300px" h="10px" justifyContent="space-between" flexDirection="row">
                                                                     <Text>{ans.answerText}</Text>
                                                                     <Flex w="10px">
-                                                                        <DeleteIcon color="red.500" mr="2" onClick={() => deleteFromAnswerList(ans.id)} />
+                                                                        <DeleteIcon cursor='pointer' color="#E63946" mr="2" onClick={() => deleteFromAnswerList(ans.id)} />
                                                                     </Flex>
                                                                 </Flex>
                                                             </HStack>
@@ -264,22 +268,22 @@ function AdminHome() {
                                                                     <Text>{ans.answerText}</Text>
                                                                 </Flex>
                                                                 <Flex w="10px">
-                                                                    <DeleteIcon color="red.500" mr="2" onClick={() => deleteFromAnswerList(ans.id)} />
+                                                                    <DeleteIcon cursor='pointer' color="#E63946" mr="2" onClick={() => deleteFromAnswerList(ans.id)} />
                                                                 </Flex>
                                                             </HStack>
                                                         ))
                                                     )}
                                                 </VStack>
                                                 <Stack spacing={5}>
-                                                    <Input
+                                                    <Textarea 
                                                         mt={5}
                                                         value={value}
                                                         variant="outline"
                                                         type="text"
                                                         placeholder="Enter answer."
                                                         onChange={(e) => setValue(e.target.value)}
-                                                    ></Input>
-                                                    <Button colorScheme="teal" onClick={addAnswerToList}>
+                                                    ></Textarea >
+                                                    <Button border='2px' borderColor='#1D3557' color='#F1FAEE' bg='#457B9D' onClick={addAnswerToList}>
                                                         Add Answer
                                                     </Button>
                                                 </Stack>
@@ -296,7 +300,7 @@ function AdminHome() {
                                                 </FormControl>
                                                 <Center>
                                                     <Flex className="actions" gap={4}>
-                                                        <Button colorScheme="teal" size="md" type="submit">
+                                                        <Button bg='#1D3557' color='#F1FAEE' size="md" _hover={{ bg: '#457B9D' }} type="submit">
                                                             {isEditing ? "Update" : "Add"}
                                                         </Button>
                                                         <Button
@@ -321,29 +325,26 @@ function AdminHome() {
                     }
                     <Box position="relative" fontSize='xl' padding="10">
                         <Divider />
-                        <AbsoluteCenter bg="white" px="4">
-                            Question list
+                        <AbsoluteCenter color='#1D3557' bg="white" px="4">
+                            Admin dashboard
                         </AbsoluteCenter>
                     </Box>
-                    <Card>
-                        <CardHeader>
-                            <Flex>
-                                <Box p='4'>
-                                    <Button
-                                        colorScheme="blue"
-                                        onClick={() => {
-                                            setIsEditing(false);
-                                            setPopoupOpen(true);
-                                        }}>
-                                        Add new question
-                                    </Button>
-                                </Box>
-                                <Spacer />
-                            </Flex>
+                    <Card>                    
+                        <CardHeader align='center'>
+                            <Heading color='#1D3557' size='xl'>Questions</Heading>
+                            <Box p='4'>
+                                <Button 
+                                    color='#F1FAEE' bg='#457B9D' _hover={{ bg: '#1D3557' }}
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        setPopoupOpen(true);
+                                    }}>Add question
+                                </Button>
+                            </Box>
                         </CardHeader>
                         <CardBody>
                             <TableContainer w="70vw">
-                                <Table variant="striped" colorScheme="blackAlpha">
+                                <Table variant="striped" color='#1D3557'>
                                     <Thead>
                                         <Tr>
                                             <Th>Question</Th>
@@ -364,14 +365,14 @@ function AdminHome() {
                                                     <Td>
                                                         <Stack direction="row" spacing={4}>
                                                             <Button
-                                                                colorScheme="red"
+                                                                color='#F1FAEE' bg='#e63946'
                                                                 size="md"
                                                                 onClick={() => handleDelete(val.id)}
                                                             >
                                                                 Delete
                                                             </Button>
                                                             <Button
-                                                                colorScheme="blue"
+                                                                color='#F1FAEE' bg='#1D3557'
                                                                 size="md"
                                                                 onClick={() => handleUpdateClick(val)}
                                                             >
@@ -386,12 +387,21 @@ function AdminHome() {
                                 </Table>
                             </TableContainer>
                         </CardBody>
-                        <CardFooter>
-                            <ButtonGroup gap='2'>
-                                {pageNumber > 1 && <IconButton onClick={handlePreviousPage} icon={<ArrowBackIcon />} />}
-                                {pageNumber < total && <IconButton onClick={handleNextPage} icon={<ArrowForwardIcon />} />}
-                            </ButtonGroup>
-                        </CardFooter>
+
+                            <Box align='center' mb='20px'>
+                                <ButtonGroup gap='2'>
+                                    {pageNumber > 1 && <IconButton isRound={true} fontSize='20px' color='#F1FAEE' bg='#457B9D' _active={{
+                                        bg: '#dddfe2',
+                                        transform: 'scale(1.28)',
+                                        borderColor: '#F1FAEE',
+                                    }} _hover={{ bg: '#1D3557' }} onClick={handlePreviousPage} icon={<ArrowLeftIcon />} />}
+                                    {pageNumber < total && <IconButton isRound={true} color='#F1FAEE' bg='#457B9D' fontSize='20px' _active={{
+                                        bg: '#dddfe2',
+                                        transform: 'scale(1.28)',
+                                        borderColor: '#F1FAEE',
+                                    }} _hover={{ bg: '#1D3557' }} onClick={handleNextPage} icon={<ArrowRightIcon />} />}
+                                </ButtonGroup>
+                            </Box>
                     </Card>
                 </Flex>
             </Center>
