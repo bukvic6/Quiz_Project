@@ -43,12 +43,19 @@ namespace QuizProject.Infrastructure.Service
             return await _adminRepository.DeleteQuestion(id);
         }
 
-        public async Task<List<QuestionDTO>> GetQuestions(int pageNumber, int pageSize)
+        public async Task<List<QuestionDTO>> GetQuestions(int pageNumber, int pageSize, string? param)
         {
-            var questions = await _adminRepository.GetAllQuestions(pageNumber, pageSize);
+            var questions = await _adminRepository.GetQuestions(pageNumber, pageSize, param);                   
             var questionListDTO = _mapper.Map<List<QuestionDTO>>(questions);
             return questionListDTO;
         }
+        public async Task<List<UserListDTO>> GetUsers(int pageNumber, int pageSize, string? param)
+        {
+            var users = await _adminRepository.GetUsers(pageNumber, pageSize, param);
+            var usersListDTO = _mapper.Map<List<UserListDTO>>(users);
+            return usersListDTO;
+        }
+
         public async Task<List<ResultsDTO>> GetResults(int pageNumber, int pageSize)
         {
             var results = await _adminRepository.GetResults(pageNumber, pageSize);
@@ -56,15 +63,29 @@ namespace QuizProject.Infrastructure.Service
             return resultsDTO;
         }
 
-        public async Task<int> GetCount()
+        public async Task<int> GetCount(string? param)
         {
-            int count = await _adminRepository.GetQuestionCount();
-            return count;
+            return await _adminRepository.GetQuestionCount(param);
         }
 
         public async Task<bool> DeleteAnswers(List<int> answersToDelete)
         {
             return await _adminRepository.DeleteAnswers(answersToDelete);
+        }
+
+        public async Task<int> GetResultCount()
+        {
+            return await _adminRepository.GetResultCount();
+        }
+
+        public async Task<List<StatsDTO>> GetStatistic()
+        {
+            return await _adminRepository.GetStatistic();            
+        }
+
+        public async Task<int> GetUserCount()
+        {
+            return await _adminRepository.GetUserCount();
         }
     }
 }

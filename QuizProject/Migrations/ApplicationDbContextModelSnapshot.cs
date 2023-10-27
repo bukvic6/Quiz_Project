@@ -52,6 +52,9 @@ namespace QuizProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CorrectCount")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -62,6 +65,9 @@ namespace QuizProject.Migrations
                     b.Property<string>("RightAnswer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WrongCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

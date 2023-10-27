@@ -1,4 +1,5 @@
 ﻿using QuizProject.Domain.Model;
+using QuizProject.Domain.Model.ModelDTO;
 
 namespace QuizProject.Infrastructure.Repository.IRepository
 {
@@ -7,11 +8,14 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task ChangeAnswers(ICollection<Answer> answers);
         public Task<int> ChangeQuestion(Question questionEntity);
         public Task<Question> CreateQuestion(Question question);
-        Task<bool> DeleteAnswers(List<int> answersToDelete);
+        public Task<bool> DeleteAnswers(List<int> answersToDelete);
         public Task<bool> DeleteQuestion(int id);
-        public Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize);
-        public Task<int> GetQuestionCount();
+        public Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param);
+        public Task<int> GetQuestionCount(string? param);
         public Task<List<QuizResults>> GetResults(int pn, int ps);
-
+        public Task<List<User>> GetUsers(int pageNumber, int pageSize, string? param);
+        public Task<int> GetResultCount();
+        public Task<List<StatsDTO>> GetStatistic();
+        public Task<int> GetUserCount();
     }
 }

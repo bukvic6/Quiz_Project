@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizProject.Domain.Data;
 using QuizProject.Domain.Model;
+using QuizProject.Domain.Model.ModelDTO;
 using QuizProject.Infrastructure.Repository.IRepository;
 
 namespace QuizProject.Infrastructure.Repository
@@ -35,9 +36,24 @@ namespace QuizProject.Infrastructure.Repository
 
         public async Task<int> ChangeQuestion(Question questionEntity)
         {
-            _context.Entry(questionEntity).State = EntityState.Modified;
-            return await _context
-                .SaveChangesAsync();
+            var existingQuestion = await _context.Questions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(q => q.Id == questionEntity.Id);
+
+            if (existingQuestion != null)
+            {
+                existingQuestion.QuestionText = questionEntity.QuestionText;
+                existingQuestion.RightAnswer = questionEntity.RightAnswer;
+
+                _context.Entry(existingQuestion).Property(q => q.WrongCount).IsModified = false;
+                _context.Entry(existingQuestion).Property(q => q.CorrectCount).IsModified = false;
+
+                return await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public async Task CreateAnswers(List<Answer> answers)
@@ -104,19 +120,77 @@ namespace QuizProject.Infrastructure.Repository
             return results;
         }
 
-        public async Task<List<Question>> GetAllQuestions(int pageNumber, int pageSize)
+        public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param)
         {
             int skip = (pageNumber - 1) * pageSize;
-            return await _context.Questions
-                .Skip(skip)
-                .Take(pageSize)
-                .Include(q => q.Answers)
-                .ToListAsync();
+            if (!String.IsNullOrEmpty(param))
+            {
+                return await _context.Questions
+                    .Where(q => q.QuestionText.Contains(param) || q.RightAnswer.Contains(param))
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .Include(q => q.Answers)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Questions
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .Include(q => q.Answers)
+                    .ToListAsync();
+            }
         }
 
-        public async Task<int> GetQuestionCount()
+        public async Task<int> GetQuestionCount(string? param)
         {
-            return await _context.Questions
+            if (!String.IsNullOrEmpty(param))
+            {
+                return await _context.Questions
+                    .Where(q => q.QuestionText.Contains(param) || q.RightAnswer.Contains(param))
+                    .CountAsync();
+            }
+            else
+            {
+                return await _context.Questions
+                    .CountAsync();
+            }
+        }
+
+        public async Task<List<User>> GetUsers(int pageNumber, int pageSize, string? param)
+        {
+            int skip = (pageNumber - 1) * pageSize;
+            if (!String.IsNullOrEmpty(param))
+            {
+                return await _context.Users
+                    .Where(q => q.Name.Contains(param) || q.Email.Contains(param))
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Users
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+        }
+        public async Task<List<StatsDTO>> GetStatistic()
+        {
+            return await _context.Questions.Select(x => new StatsDTO { QuestionText = x.QuestionText, CorrectCount = x.CorrectCount, WrongCount = x.WrongCount}).ToListAsync();
+
+        }
+
+        public async Task<int> GetResultCount()
+        {
+            return await _context.QuizzResults
+                .CountAsync();
+        }
+
+        public async Task<int> GetUserCount()
+        {
+            return await _context.Users
                 .CountAsync();
         }
     }

@@ -1,14 +1,12 @@
 ﻿.popup-content {
-    margin: auto;
+    width: fit-content;
     height: fit-content;
     background: rgb(255, 255, 255);
-    padding: 70px;
+    padding: 50px;
     margin: 0 auto;
     background: rgb(255, 255, 255);
     text-align: center;
-    border: 1px;
-    border-color
-    border-radius: 10px;
+    border-radius:8px
 }
 .popup-arrow {
     color: rgb(255, 255, 255);

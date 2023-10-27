@@ -49,7 +49,7 @@ namespace QuizProject.Controllers
 
         [HttpPost("updateQuestion")]
         [Authorize]
-        public async Task<ActionResult<QuestionDTO>> UpdateQuestion(QuestionDTO questionDTO)
+        public async Task<ActionResult<int>> UpdateQuestion(QuestionDTO questionDTO)
         {
             var resultModel = await _adminService.ChangeQuestion(questionDTO);
             return Ok(resultModel);
@@ -57,11 +57,18 @@ namespace QuizProject.Controllers
 
         [HttpGet("{pn}/{ps}")]
         [Authorize]
-        public async Task<ActionResult<List<QuestionDTO>>> GetQuestions(int pn, int ps)
+        public async Task<ActionResult<List<QuestionDTO>>> GetQuestions(int pn, int ps, [FromQuery] string? search)
         {
-            var questions = await _adminService.GetQuestions(pn, ps);
-
+            var questions = await _adminService.GetQuestions(pn, ps, search);
             return Ok(questions);
+        }
+
+        [HttpGet("statistic")]
+        [Authorize]
+        public async Task<ActionResult<List<StatsDTO>>> GetStatistic()
+        {
+            var statistic = await _adminService.GetStatistic();
+            return Ok(statistic);
         }
 
         [HttpGet("results/{pn}/{ps}")]
@@ -88,10 +95,34 @@ namespace QuizProject.Controllers
 
         [HttpGet("count")]
         [Authorize]
-        public async Task<int> GetCount()
+        public async Task<int> GetCount([FromQuery] string? search)
         {
-            int count = await _adminService.GetCount();
+            int count = await _adminService.GetCount(search);
             return count;
+        }
+
+        [HttpGet("resultCount")]
+        [Authorize]
+        public async Task<int> GetResultCount()
+        {
+            int count = await _adminService.GetResultCount();
+            return count;
+        }
+
+        [HttpGet("userCount")]
+        [Authorize]
+        public async Task<int> GetUserCount()
+        {
+            int count = await _adminService.GetUserCount();
+            return count;
+        }
+
+        [HttpGet("users/{pn}/{ps}")]
+        [Authorize]
+        public async Task<ActionResult<List<QuestionDTO>>> GetUsers(int pn, int ps, [FromQuery] string? search)
+        {
+            var questions = await _adminService.GetUsers(pn, ps, search);
+            return Ok(questions);
         }
     }
 }

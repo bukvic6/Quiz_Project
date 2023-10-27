@@ -4,26 +4,59 @@ const ADMIN_API = `https://localhost:7192/api/Admin`;
 
 
 class AdminService {
-    getQuestions(pn,ps) {
-        return api.get(`${ADMIN_API}/${pn}/${ps}`);
+    getQuestions(pn, ps, search) {
+        return api.get(`${ADMIN_API}/${pn}/${ps}`, {
+            params: {
+                search: search
+            }
+        });
     }
+
     createQuestion(question) {
         return api.post(ADMIN_API + "/createQuestion", question)
     }
+
     deleteAnswer(answersToDelete) {
         return api.post(`${ADMIN_API}/deleteAnswer`, answersToDelete)
     }
+
     deleteQuestion(id) {
         return api.delete(`${ADMIN_API}/delete/${id}`)
     }
+
     updateQuestion(question) {
         return api.post(ADMIN_API + "/updateQuestion", question)
     }
-    getCount() {
-        return api.get(ADMIN_API + "/count")
+
+    getCount(search) {
+        return api.get(`${ADMIN_API}/count`, {
+            params: {
+                search: search
+            }
+        });
     }
+
+    getResultCount() {
+        return api.get(ADMIN_API + "/resultCount")
+    }
+    getUserCount() {
+        return api.get(ADMIN_API + "/userCount")
+    }
+
     getResults(pn, ps) {
         return api.get(`${ADMIN_API}/results/${pn}/${ps}`)
     }
+    getStatistic() {
+        return api.get(ADMIN_API + "/statistic")
+    }
+
+    getUsers(pn, ps, search) {
+        return api.get(`${ADMIN_API}/users/${pn}/${ps}`, {
+            params: {
+                search: search
+            }
+        });
+    }
+
 }
 export default new AdminService()

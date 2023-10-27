@@ -38,8 +38,14 @@ namespace QuizProject.Infrastructure.Service
                 {
                     if (checkAnswer.Equals(question.RightAnswer))
                     {
+                        question.CorrectCount += 1;
                         calculateScore += 1;
                     }
+                    else
+                    {
+                        question.WrongCount += 1;
+                    }
+                    _userRepository.UpdateQuestionCount(question);
                 }
                 else
                 {

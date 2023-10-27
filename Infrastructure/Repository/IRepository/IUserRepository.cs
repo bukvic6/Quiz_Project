@@ -11,6 +11,8 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task<List<QuizResults>> GetUserResults(string email, int pn, int ps);
         public Task<int> GetCount(string email);
         public Task<int> GetResultsCount();
+        public void UpdateQuestionCount(Question question);
+
 
 
     }

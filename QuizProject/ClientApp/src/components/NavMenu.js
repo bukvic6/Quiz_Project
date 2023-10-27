@@ -13,6 +13,7 @@ import "./NavMenu.css";
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
 
+
     constructor(props) {
         super(props);
 
@@ -37,9 +38,10 @@ export class NavMenu extends Component {
         return (
             <header>
                 <Navbar
-                    className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3"
+                    className="navbar-expand-sm  navbar-toggleable-sm border-bottom box-shadow mb-3"
                     container
-                    light
+                    style={customNavbarStyle}
+                    dark
                 >
                     <NavbarBrand tag={Link} to="/home">
                         QuizProject
@@ -53,14 +55,14 @@ export class NavMenu extends Component {
                         <ul className="navbar-nav flex-grow">
                             {this.state.isLoggedIn && (
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/Home">
+                                    <NavLink tag={Link} className="text-light" to="/Home">
                                         Home
                                     </NavLink>
                                 </NavItem>
                             )}
                             <NavItem>
                                 {this.props.isLoggedIn && (
-                                    <NavLink tag={Link} className="text-dark" to="/results">
+                                    <NavLink tag={Link} className="text-light" to="/results">
                                         Results
                                     </NavLink>
                                 )}
@@ -69,14 +71,14 @@ export class NavMenu extends Component {
                                 {this.props.isLoggedIn ? (
                                     <NavLink
                                         tag={Link}
-                                        className="text-dark"
+                                        className="text-light"
                                         to="/"
                                         onClick={this.handleLogout}
                                     >
                                         Logout
                                     </NavLink>
                                 ) : (
-                                    <NavLink tag={Link} className="text-dark" to="/">
+                                    <NavLink tag={Link} className="text-light" to="/">
                                         Login
                                     </NavLink>
                                 )}
@@ -88,3 +90,7 @@ export class NavMenu extends Component {
         );
     }
 }
+const customNavbarStyle = {
+    backgroundColor: '#1D3557',
+    color: 'white',
+};

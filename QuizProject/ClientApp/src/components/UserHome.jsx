@@ -109,18 +109,18 @@ function UserHome() {
                                             <Image boxSize='21em' src={penguin} alt="penguin" objectFit='cover' />
                                             <Text color='#F1FAEE' fontSize='30px'>Excellent</Text>
                                         </Flex>
-                                    ) : percentage > 60 && percentage < 80 ? (
+                                    ) : (percentage > 60) ? (
                                         <Flex direction='column' gap={4} alignItems='center'>
                                                 <Image boxSize='21em' src={fox} alt="fox" objectFit='cover' />
                                             <Text color='#F1FAEE' fontSize='30px'>Wow very good</Text>
                                         </Flex>
-                                    ) : percentage > 50 && percentage < 60 ? (
+                                    ) : percentage > 50? (
                                         <Flex direction='column' gap={4} alignItems='center'>
                                                     <Image boxSize='21em' src={snail} alt="snail" objectFit='cover' />
-                                                    <Text color='#F1FAEE' fontSize='30px'>Meh, you can do bette</Text>
+                                                    <Text color='#F1FAEE' fontSize='30px'>Meh, you can do better</Text>
                                         </Flex>
                                     ) :
-                                    percentage > 20 && percentage < 50 ? (
+                                    percentage > 20  ? (
                                         <Flex direction='column' gap={4} alignItems='center'>
                                                         <Image boxSize='21em' src={hen} alt="hen" objectFit='cover' />
                                             <Text color='#F1FAEE' fontSize='30px'>Not so good</Text>

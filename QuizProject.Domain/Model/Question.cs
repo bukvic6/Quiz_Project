@@ -8,6 +8,8 @@ namespace QuizProject.Domain.Model
         public string QuestionText { get; set; }
         public ICollection<Answer> Answers { get; } = new List<Answer>();
         public string RightAnswer { get; set; }
+        public int CorrectCount { get; set; }
+        public int WrongCount { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

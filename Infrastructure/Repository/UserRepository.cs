@@ -75,6 +75,12 @@ namespace QuizProject.Infrastructure.Repository
             return userResult;
         }
 
+        public void UpdateQuestionCount(Question question)
+        {
+            _context.Entry(question).State = EntityState.Modified;
+        }
+
+
         public async Task<int> GetResultsCount()
         {
             return await _context.QuizzResults
