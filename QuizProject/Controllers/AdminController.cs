@@ -73,9 +73,12 @@ namespace QuizProject.Controllers
 
         [HttpGet("results/{pn}/{ps}")]
         [Authorize]
-        public async Task<ActionResult<List<ResultsDTO>>> GetResults(int pn, int ps)
+        public async Task<ActionResult<List<ResultsDTO>>> GetResults(int pn, int ps, [FromQuery] string? startDate, [FromQuery] string? endDate)
         {
-            var results = await _adminService.GetResults(pn, ps);
+            var role = GetUserRole();
+            var email = GetUserFromContex();
+
+            var results = await _adminService.GetResults(pn, ps, startDate, endDate, role, email);
             return Ok(results);
         }
 

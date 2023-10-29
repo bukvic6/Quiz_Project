@@ -70,17 +70,17 @@ namespace QuizProject.Infrastructure.Service
             }
         }
 
-        public async Task<int> GetCount(string email, string role)
+        public async Task<int> GetCount(string startDate, string endDate,string email, string role)
         {
             int count = 0;
             if (role == "ADMIN")
             {
-                count = await _userRepository.GetResultsCount();
+                count = await _userRepository.GetResultsCount(startDate, endDate);
                 return count;
             }
             else if (role == "USER")
             {
-                count = await _userRepository.GetCount(email);
+                count = await _userRepository.GetCount(email, startDate, endDate);
                 return count;
             }
 
@@ -97,13 +97,6 @@ namespace QuizProject.Infrastructure.Service
         public async Task<List<ResultsDTO>> GetTopResults(int topNumber)
         {
             var results = await _userRepository.GetTopResults(topNumber);
-            var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
-            return resultsDTO;
-        }
-
-        public async Task<List<ResultsDTO>> UserResults(string email, int pageNumber, int pageSize)
-        {
-            var results = await _userRepository.GetUserResults(email, pageNumber, pageSize);
             var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
             return resultsDTO;
         }

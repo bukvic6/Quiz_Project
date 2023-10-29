@@ -17,7 +17,12 @@ namespace QuizProject.MappingConfigurations
                 .ForMember(dest => dest.QuestionId, otp => otp.MapFrom(src => src.Id))
                 .ForMember(dest => dest.AnswerText, otp => otp.MapFrom(src => src.Answers.ToList()));
 
-            CreateMap<QuestionDTO, Question>();
+            CreateMap<QuestionDTO, Question>().ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answers.Select(answerDTO => new Answer
+            {
+                AnswerText= answerDTO.AnswerText,
+                QuestionId = src.Id
+            })))
+                ;
             CreateMap<Question, QuestionsForUserDTO>()
                 .ForMember(dest => dest.Answers, otp => otp.MapFrom(src => src.Answers.ToList()));
 

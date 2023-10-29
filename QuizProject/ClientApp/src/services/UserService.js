@@ -18,8 +18,13 @@ class UserService {
         return api.get(`${USER_API}/userResults/${pn}/${ps}`)
     }
 
-    getResultCount() {
-        return api.get(USER_API + "/count")
+    getResultCount(startDate, endDate) {
+        return api.get(`${USER_API}/count`, {
+            params: {
+                startDate: startDate,
+                endDate: endDate
+            }
+        });
     }
 }
 export default new UserService()

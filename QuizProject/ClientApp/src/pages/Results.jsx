@@ -1,9 +1,11 @@
 ﻿import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
 import moment from "moment";
-import { TableContainer, Table, Image, CircularProgress,CircularProgressLabel,Thead, Th, Tr, Td, Tbody, CardFooter, Box, Center, Input, ButtonGroup, IconButton, Flex, Divider, AbsoluteCenter, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { TableContainer, Table, Image, CircularProgress, CircularProgressLabel, Thead, Spacer, Th, Tr, Td, Tbody, CardFooter, Box, Center, ButtonGroup, IconButton, Flex, CardHeader, Card, CardBody, Heading } from '@chakra-ui/react'
 import { useNavigate } from "../../node_modules/react-router-dom/index";
-import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon, SearchIcon, ArrowRightIcon } from '@chakra-ui/icons'
 import AdminService from "../services/AdminService";
 import trophy from './../assets/trophy.png';
 
@@ -12,16 +14,17 @@ function Results() {
     const navigate = useNavigate();
     const [results, setResults] = useState([]);
     const [topResults, setTopResults] = useState([]);
-    const [userResults, setUserResult] = useState([])
     const pageSize = 3;
     const topNumber = 4;
     const [pageNumber, setPageNumber] = useState(1);
     const [rowCount, setRowCount] = useState(0);
     const total = Math.ceil(rowCount / pageSize)
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const getCount = async () => {
         try {
-            const { data } = await UserService.getResultCount();
+            const { data } = await UserService.getResultCount(startDate, endDate);
             setRowCount(data);
         } catch {
             console.error("Error getting item count");
@@ -43,7 +46,7 @@ function Results() {
 
     const getResults = async () => {
         try {
-            const { data } = await AdminService.getResults(pageNumber, pageSize)
+            const { data } = await AdminService.getResults(pageNumber, pageSize, startDate, endDate)
             setResults(data);
             console.log(data)
         } catch (error) {
@@ -61,19 +64,19 @@ function Results() {
         }
     }
 
-    const getUserResults = async () => {
-        try {
-            const { data } = await UserService.getUserResults(pageNumber, pageSize)
-            setUserResult(data);
-            console.log(data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
     function formatDate(date) {
+        console.log(date)
         var formattedDate = moment(date).format('D.M.YYYY HH:mm');
         return formattedDate
     }
+    const onChange = () => {
+        setPageNumber(1);
+        getCount();
+        getResults();
+        console.log(startDate, endDate)
+        console.log(JSON.stringify(startDate));
+
+    };
 
     useEffect(() => {
         const userDataJSON = localStorage.getItem('token');
@@ -82,15 +85,15 @@ function Results() {
             return;
         }
         const userData = JSON.parse(userDataJSON);
-        const userRole = userData.role;
-        console.log(userRole)
-        setRole(userRole);
+        setRole(userData.role);
+        getTopResults()
+    }, []);
+
+
+    useEffect(() => {
         getCount();
         getResults();
-        getTopResults();
-        getUserResults();
-        getResults();
-    }, [navigate, pageNumber])
+    }, [pageNumber]);
 
     return (
         <Box>
@@ -132,8 +135,35 @@ function Results() {
                                     ) : null}
                                 </CardHeader>
                             <CardBody>
-                                {role === 'ADMIN' ? (
-                                    <><TableContainer>
+                                <Box bg="#457B9D" borderRadius="4px" p="4px">
+                                    <Flex flexDirection='row' gap={10} align="center">
+                                        <Spacer/>
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date) => setStartDate(date)}
+                                            selectsStart
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            showTimeSelect
+                                            placeholderText="start date"
+                                            dateFormat="MMMM d, yyyy h:mm"
+                                        />
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={(date) => setEndDate(date)}
+                                            selectsEnd
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            minDate={startDate}
+                                            placeholderText="end date"
+                                            showTimeSelect
+                                            dateFormat="MMMM d, yyyy h:mm"
+                                        />
+                                        <IconButton fontSize='20px' onClick={onChange} icon={<SearchIcon />} />
+                                        <Spacer/>
+                                    </Flex>
+                                </Box>
+                                    <TableContainer>
                                             <Table variant='striped' colorScheme='gray'>
                                                 <Thead>
                                                     <Tr>
@@ -160,37 +190,8 @@ function Results() {
                                                     })}
                                                 </Tbody>
                                             </Table>
-                                        </TableContainer></>
-
-                                ) : role === 'USER' ? (
-                                        <><TableContainer w='700px'>
-                                                <Table variant='striped' colorScheme='gray'>
-                                                    <Thead>
-                                                        <Tr>
-                                                            <Th>Username</Th>
-                                                            <Th>Points</Th>
-                                                            <Th>Date</Th>
-                                                            <Th>Rating</Th>
-                                                            <Th>Percentage</Th>
-                                                        </Tr>
-                                                    </Thead>
-                                                    <Tbody>
-                                                        {userResults.map((val, key) => {
-                                                            return (
-                                                                <Tr key={key}>
-                                                                    <Td>{val.user}</Td>
-                                                                    <Td>{val.points}</Td>
-                                                                    <Td>{formatDate(val.date)}</Td>
-                                                                    <Td>{val.rating}</Td>
-                                                                    <Td>{val.percentage} %</Td>
-                                                                </Tr>
-                                                            );
-                                                        })}
-                                                    </Tbody>
-                                                </Table>
-                                           </TableContainer></>
-
-                                ) : null} 
+                                </TableContainer>
+                                                        
                             </CardBody>
                             <CardFooter align='end'>
                                 <ButtonGroup gap='2'>

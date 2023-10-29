@@ -33,15 +33,16 @@ import {
     Card,
     CardBody,
 } from "@chakra-ui/react";
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
-    Legend, } from 'chart.js';
+    Legend } from 'chart.js';
 import { ArrowLeftIcon, DeleteIcon, SearchIcon, ArrowRightIcon } from '@chakra-ui/icons'
 
 
@@ -73,7 +74,8 @@ function AdminHome() {
     ChartJS.register(
         CategoryScale,
         LinearScale,
-        BarElement,
+        PointElement,
+        LineElement,
         Title,
         Tooltip,
         Legend
@@ -140,12 +142,10 @@ function AdminHome() {
     }
 
     const deleteAnswer = async () => {
-        console.log("Answers to delete: ", answerToDelete)
         await AdminService.deleteAnswer(answerToDelete);
     }
 
     function addAnswerToList() {
-        console.log("answers from addAnswerToList:", answers)
         if (isEditing === true) {
             const ans = {
                 id: nanoid(),
@@ -153,8 +153,6 @@ function AdminHome() {
             }
             setAnswer([...answers, ans]);
             setAnswerList([...answerList, ans]);
-            console.log("AKO EDITUJEMO:", answers)
-            console.log("AKO EDITUJEMO ANSWERLIST:", answerList)
             setValue("")
         }
         else {
@@ -163,8 +161,6 @@ function AdminHome() {
                 answerText: value,
             };
             setAnswerList([...answerList, ans]);
-            console.log("AKO DODAJEMO ANSWERLIST:", answerList)
-
             setValue("");
         }
 
@@ -534,7 +530,7 @@ function AdminHome() {
                                         </Box>
                                 </Card>
                                 <Card h='300px' p='2'>
-                                    <Bar width={120} height={30} data={chartData} options={options} />
+                                    <Line width={120} height={30} data={chartData} options={options} />
                                 </Card>
                             </Flex>
                         </Box>

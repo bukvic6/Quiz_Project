@@ -56,9 +56,9 @@ namespace QuizProject.Infrastructure.Service
             return usersListDTO;
         }
 
-        public async Task<List<ResultsDTO>> GetResults(int pageNumber, int pageSize)
+        public async Task<List<ResultsDTO>> GetResults(int pageNumber, int pageSize, string? startDate, string? endDate, string role, string email)
         {
-            var results = await _adminRepository.GetResults(pageNumber, pageSize);
+            var results = await _adminRepository.GetResults(pageNumber, pageSize, startDate,endDate, role, email);
             var resultsDTO = _mapper.Map<List<ResultsDTO>>(results);
             return resultsDTO;
         }

@@ -43,8 +43,13 @@ class AdminService {
         return api.get(ADMIN_API + "/userCount")
     }
 
-    getResults(pn, ps) {
-        return api.get(`${ADMIN_API}/results/${pn}/${ps}`)
+    getResults(pn, ps, startDate, endDate) {
+        return api.get(`${ADMIN_API}/results/${pn}/${ps}`, {
+            params: {
+                startDate: startDate,
+                endDate: endDate,
+            }
+        });
     }
     getStatistic() {
         return api.get(ADMIN_API + "/statistic")

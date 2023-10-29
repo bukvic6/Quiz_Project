@@ -24,3 +24,6 @@
 [data-popup='tooltip'].popup-overlay {
     background: transparent;
 }
+.ButtonGroup {
+    gap: 2;
+}

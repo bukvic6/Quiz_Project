@@ -8,9 +8,8 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task<User?> GetUserByUsername(string email);
         public Task AddToResults(QuizResults quizzResults);
         public Task<List<QuizResults>> GetTopResults(int topNumber);
-        public Task<List<QuizResults>> GetUserResults(string email, int pn, int ps);
-        public Task<int> GetCount(string email);
-        public Task<int> GetResultsCount();
+        public Task<int> GetCount(string email, string startDate, string endDate);
+        public Task<int> GetResultsCount(string startDate, string endDate);
         public void UpdateQuestionCount(Question question);
 
 

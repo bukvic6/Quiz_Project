@@ -33,14 +33,6 @@ namespace QuizProject.Infrastructure.Repository
                 .ToListAsync();
         }
 
-        public async Task<int> GetCount(string email)
-        {
-            User? user = await GetUserByUsername(email);
-            int count = await _context.QuizzResults
-                .Where(e => e.User == user)
-                .CountAsync();
-            return count;
-        }
 
         public async Task<List<QuizResults>> GetTopResults(int topNumber)
         {
@@ -60,31 +52,40 @@ namespace QuizProject.Infrastructure.Repository
             return userByUsername;
         }
 
-        public async Task<List<QuizResults>> GetUserResults(string email, int pageNumber, int pageSize)
-        {
-            int skip = (pageNumber - 1) * pageSize;
-
-            User? user = await GetUserByUsername(email);
-            var userResult = await _context.QuizzResults
-                .OrderBy(e => e.Points)
-                .OrderByDescending(e => e.Points)
-                .Where(e => e.User == user)
-                .Skip(skip)
-                .Take(pageSize)
-                .ToListAsync();
-            return userResult;
-        }
-
         public void UpdateQuestionCount(Question question)
         {
             _context.Entry(question).State = EntityState.Modified;
         }
-
-
-        public async Task<int> GetResultsCount()
+        public async Task<int> GetCount(string email, string startDate, string endDate)
         {
+            User? user = await GetUserByUsername(email);
+            if (!String.IsNullOrEmpty(startDate) && !String.IsNullOrEmpty(endDate))
+            {
+                var parsedStartDate = DateTime.Parse(startDate);
+                var parsedEndDate = DateTime.Parse(endDate);
+                return await _context.QuizzResults
+                    .Where(r => r.User == user && r.Date >= parsedStartDate && r.Date < parsedEndDate)
+                    .CountAsync();
+            }
             return await _context.QuizzResults
+                .Where(e => e.User == user)
                 .CountAsync();
+        }
+
+        public async Task<int> GetResultsCount(string startDate, string endDate)
+        {
+            if (!String.IsNullOrEmpty(startDate) && !String.IsNullOrEmpty(endDate))
+            {
+                var parsedStartDate = DateTime.Parse(startDate);
+                var parsedEndDate = DateTime.Parse(endDate);
+                return await _context.QuizzResults
+                    .Where(r => r.Date >= parsedStartDate && r.Date < parsedEndDate)
+                    .CountAsync();
+            }
+            return await _context.QuizzResults
+            .CountAsync();
+
+
         }
     }
 }

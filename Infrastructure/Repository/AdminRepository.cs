@@ -26,10 +26,9 @@ namespace QuizProject.Infrastructure.Repository
         {
             foreach (Answer answer in answers)
             {
-                if (answer.Id == 0)
-                {
-                    await _context.Answers.AddAsync(answer);
-                }
+
+                await _context.Answers.AddAsync(answer);
+            
             }
             await _context.SaveChangesAsync();
         }
@@ -45,10 +44,17 @@ namespace QuizProject.Infrastructure.Repository
                 existingQuestion.QuestionText = questionEntity.QuestionText;
                 existingQuestion.RightAnswer = questionEntity.RightAnswer;
 
-                _context.Entry(existingQuestion).Property(q => q.WrongCount).IsModified = false;
-                _context.Entry(existingQuestion).Property(q => q.CorrectCount).IsModified = false;
+                _context.Entry(existingQuestion).State = EntityState.Modified;
 
-                return await _context.SaveChangesAsync();
+                try
+                {
+                    return await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred: {ErrorMessage}", ex.Message);
+                    return 0;
+                }
             }
             else
             {
@@ -108,19 +114,63 @@ namespace QuizProject.Infrastructure.Repository
             }
         }
 
-        public async Task<List<QuizResults>> GetResults(int pageNumber, int pageSize)
+        public async Task<List<QuizResults>> GetResults(int pageNumber, int pageSize, string? startDate, string? endDate, string role, string email)
         {
             int skip = (pageNumber - 1) * pageSize;
 
-            var results = await _context.QuizzResults
+
+            if (!String.IsNullOrEmpty(startDate) && !String.IsNullOrEmpty(endDate))
+            {
+                var parsedStartDate = DateTime.Parse(startDate);
+                var parsedEndDate = DateTime.Parse(endDate);
+                if ( role == "ADMIN")
+                {
+                    return await _context.QuizzResults
+                        .Where(r => r.Date >= parsedStartDate && r.Date < parsedEndDate)
+                        .Skip(skip)
+                        .Take(pageSize)
+                        .Include(b => b.User)
+                        .ToListAsync();                   
+                }
+                else if (role == "USER")
+                {
+                    User? user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Email == email);
+                    var userResult = await _context.QuizzResults
+                        .OrderBy(e => e.Points)
+                        .OrderByDescending(e => e.Points)
+                        .Where(r => r.User == user && r.Date >= parsedStartDate && r.Date < parsedEndDate)
+                        .Skip(skip)
+                        .Take(pageSize)
+                        .ToListAsync();
+                    return userResult;
+                }
+
+            }
+            if (role == "USER")
+            {
+                User? user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Email == email);
+                return await _context.QuizzResults
+                .OrderBy(e => e.Points)
+                .OrderByDescending(e => e.Points)
+                .Where(e => e.User == user)
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
+            }
+            return await _context.QuizzResults
                 .Skip(skip)
                 .Take(pageSize)
                 .Include(b => b.User)
-                .ToListAsync();
-            return results;
+                .ToListAsync();                
+
+
         }
 
-        public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param)
+
+
+public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param)
         {
             int skip = (pageNumber - 1) * pageSize;
             if (!String.IsNullOrEmpty(param))

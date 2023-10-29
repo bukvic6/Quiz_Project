@@ -12,7 +12,7 @@ namespace QuizProject.Infrastructure.Repository.IRepository
         public Task<bool> DeleteQuestion(int id);
         public Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param);
         public Task<int> GetQuestionCount(string? param);
-        public Task<List<QuizResults>> GetResults(int pn, int ps);
+        public Task<List<QuizResults>> GetResults(int pn, int ps,string? startDate, string? endDate, string role, string email);
         public Task<List<User>> GetUsers(int pageNumber, int pageSize, string? param);
         public Task<int> GetResultCount();
         public Task<List<StatsDTO>> GetStatistic();

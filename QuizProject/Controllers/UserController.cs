@@ -35,7 +35,6 @@ namespace QuizProject.Controllers
         [Authorize]
         public async Task<ActionResult<List<QuestionsForUserDTO>>> GetQuestions()
         {
-            var email = GetUserFromContex();
             var questions = await _userService.GetQuestions();
             return Ok(questions);
         }
@@ -48,24 +47,14 @@ namespace QuizProject.Controllers
             return Ok(results);
         }
 
-        [HttpGet("userResults/{pn}/{ps}")]
-        [Authorize]
-        public async Task<ActionResult<List<ResultsDTO>>> UserResults(int pn, int ps)
-        {
-            var email = GetUserFromContex();
-
-            var results = await _userService.UserResults(email, pn, ps);
-            return Ok(results);
-        }
-
         [HttpGet("count")]
         [Authorize]
-        public async Task<int> GetCount()
+        public async Task<int> GetCount([FromQuery] string? startDate, [FromQuery] string? endDate)
         {
             var role = GetUserRole();
             var email = GetUserFromContex();
 
-            int count = await _userService.GetCount(email, role);
+            int count = await _userService.GetCount(startDate, endDate, email, role);
             return count;
         }
 
