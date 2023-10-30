@@ -22,15 +22,15 @@ namespace QuizProject.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task ChangeAnswers(ICollection<Answer> answers)
+        public async Task AddAnswers(ICollection<Answer> answers)
         {
             foreach (Answer answer in answers)
             {
-
-                await _context.Answers.AddAsync(answer);
-            
+                await _context.Answers
+                    .AddAsync(answer);        
             }
-            await _context.SaveChangesAsync();
+            await _context
+                .SaveChangesAsync();
         }
 
         public async Task<int> ChangeQuestion(Question questionEntity)
@@ -48,7 +48,8 @@ namespace QuizProject.Infrastructure.Repository
 
                 try
                 {
-                    return await _context.SaveChangesAsync();
+                    return await _context
+                        .SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -60,12 +61,6 @@ namespace QuizProject.Infrastructure.Repository
             {
                 return 0;
             }
-        }
-
-        public async Task CreateAnswers(List<Answer> answers)
-        {
-            await _context.Answers.AddRangeAsync(answers);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<Question> CreateQuestion(Question question)
@@ -164,13 +159,9 @@ namespace QuizProject.Infrastructure.Repository
                 .Take(pageSize)
                 .Include(b => b.User)
                 .ToListAsync();                
-
-
         }
 
-
-
-public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param)
+        public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, string? param)
         {
             int skip = (pageNumber - 1) * pageSize;
             if (!String.IsNullOrEmpty(param))
@@ -207,22 +198,17 @@ public async Task<List<Question>> GetQuestions(int pageNumber, int pageSize, str
             }
         }
 
-        public async Task<List<User>> GetUsers(int pageNumber, int pageSize, string? param)
+        public async Task<List<User>> GetUsers(string? param)
         {
-            int skip = (pageNumber - 1) * pageSize;
             if (!String.IsNullOrEmpty(param))
             {
                 return await _context.Users
                     .Where(q => q.Name.Contains(param) || q.Email.Contains(param))
-                    .Skip(skip)
-                    .Take(pageSize)
                     .ToListAsync();
             }
             else
             {
                 return await _context.Users
-                    .Skip(skip)
-                    .Take(pageSize)
                     .ToListAsync();
             }
         }

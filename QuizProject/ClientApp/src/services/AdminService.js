@@ -55,8 +55,8 @@ class AdminService {
         return api.get(ADMIN_API + "/statistic")
     }
 
-    getUsers(pn, ps, search) {
-        return api.get(`${ADMIN_API}/users/${pn}/${ps}`, {
+    getUsers(search) {
+        return api.get(`${ADMIN_API}/users`, {
             params: {
                 search: search
             }

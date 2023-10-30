@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizProject.Domain.Model.ModelDTO;
 using QuizProject.Infrastructure.Service.IService;
-using System.Security.Claims;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using QuizProject.Infrastructure.Service;
 
 namespace QuizProject.Controllers
 {
@@ -120,11 +116,11 @@ namespace QuizProject.Controllers
             return count;
         }
 
-        [HttpGet("users/{pn}/{ps}")]
+        [HttpGet("users")]
         [Authorize]
-        public async Task<ActionResult<List<QuestionDTO>>> GetUsers(int pn, int ps, [FromQuery] string? search)
+        public async Task<ActionResult<List<QuestionDTO>>> GetUsers([FromQuery] string? search)
         {
-            var questions = await _adminService.GetUsers(pn, ps, search);
+            var questions = await _adminService.GetUsers(search);
             return Ok(questions);
         }
     }

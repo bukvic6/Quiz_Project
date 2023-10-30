@@ -26,7 +26,7 @@ namespace QuizProject.Infrastructure.Service
         {
             var questionEntity = _mapper.Map<QuestionDTO, Question>(questionDTO);
             var cretaed = await _adminRepository.ChangeQuestion(questionEntity);
-            await _adminRepository.ChangeAnswers(questionEntity.Answers);
+            await _adminRepository.AddAnswers(questionEntity.Answers);
             return cretaed;
         }
 
@@ -49,9 +49,9 @@ namespace QuizProject.Infrastructure.Service
             var questionListDTO = _mapper.Map<List<QuestionDTO>>(questions);
             return questionListDTO;
         }
-        public async Task<List<UserListDTO>> GetUsers(int pageNumber, int pageSize, string? param)
+        public async Task<List<UserListDTO>> GetUsers(string? param)
         {
-            var users = await _adminRepository.GetUsers(pageNumber, pageSize, param);
+            var users = await _adminRepository.GetUsers(param);
             var usersListDTO = _mapper.Map<List<UserListDTO>>(users);
             return usersListDTO;
         }

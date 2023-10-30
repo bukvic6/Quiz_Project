@@ -16,7 +16,6 @@ export class NavMenu extends Component {
 
     constructor(props) {
         super(props);
-
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
             collapsed: true,
@@ -28,6 +27,7 @@ export class NavMenu extends Component {
             collapsed: !this.state.collapsed,
         });
     }
+
     handleLogout = () => {
         localStorage.clear();
         this.props.updateLoginStatus(false);

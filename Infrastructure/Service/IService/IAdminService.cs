@@ -12,7 +12,7 @@ namespace QuizProject.Infrastructure.Service.IService
         public Task<bool> DeleteAnswers(List<int> answersToDelete);
         public Task<List<ResultsDTO>> GetResults(int pn, int ps, string? startDate, string? endDate, string role, string email);
 
-        public Task<List<UserListDTO>> GetUsers(int pn, int ps, string? search);
+        public Task<List<UserListDTO>> GetUsers(string? search);
         public Task<int> GetResultCount();
         public Task<List<StatsDTO>> GetStatistic();
         public Task<int> GetUserCount();

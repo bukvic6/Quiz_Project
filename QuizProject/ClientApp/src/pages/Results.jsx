@@ -29,7 +29,7 @@ function Results() {
         } catch {
             console.error("Error getting item count");
         }
-    }
+    };
 
     const handlePreviousPage = () => {
         if (pageNumber > 1) {
@@ -48,34 +48,29 @@ function Results() {
         try {
             const { data } = await AdminService.getResults(pageNumber, pageSize, startDate, endDate)
             setResults(data);
-            console.log(data)
         } catch (error) {
-            console.log(error)
-        }           
-    }
+            console.log(error);
+        }
+    };
 
     const getTopResults = async () => {
         try {
             const { data } = await UserService.getTopFive(topNumber)
             setTopResults(data);
-            console.log(data)
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     function formatDate(date) {
-        console.log(date)
         var formattedDate = moment(date).format('D.M.YYYY HH:mm');
-        return formattedDate
-    }
+        return formattedDate;
+    };
+
     const onChange = () => {
         setPageNumber(1);
         getCount();
         getResults();
-        console.log(startDate, endDate)
-        console.log(JSON.stringify(startDate));
-
     };
 
     useEffect(() => {
@@ -86,12 +81,12 @@ function Results() {
         }
         const userData = JSON.parse(userDataJSON);
         setRole(userData.role);
-        getTopResults()
+        getTopResults();
+        getCount();
     }, []);
 
 
     useEffect(() => {
-        getCount();
         getResults();
     }, [pageNumber]);
 
@@ -117,7 +112,8 @@ function Results() {
                                                 <CardFooter>
                                                     <CircularProgress size='50px' value={val.percentage} color='#A8DADC'>
                                                         <CircularProgressLabel>{ val.percentage } %</CircularProgressLabel>
-                                                    </CircularProgress>                                                </CardFooter>
+                                                    </CircularProgress>
+                                                </CardFooter>
                                             </Card>
                                         )
                                     })}
@@ -145,7 +141,7 @@ function Results() {
                                             startDate={startDate}
                                             endDate={endDate}
                                             showTimeSelect
-                                            placeholderText="start date"
+                                            placeholderText=" Start date"
                                             dateFormat="MMMM d, yyyy h:mm"
                                         />
                                         <DatePicker
@@ -155,7 +151,7 @@ function Results() {
                                             startDate={startDate}
                                             endDate={endDate}
                                             minDate={startDate}
-                                            placeholderText="end date"
+                                            placeholderText=" End date"
                                             showTimeSelect
                                             dateFormat="MMMM d, yyyy h:mm"
                                         />

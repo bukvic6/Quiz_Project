@@ -53,7 +53,6 @@ namespace QuizProject.Infrastructure.Service
                 }
             }
             int percentage = (int)Math.Round((double)(100 * calculateScore) / questionLenght);
-
             try
             {
                 var user = await _userRepository.GetUserByUsername(email);
@@ -70,20 +69,9 @@ namespace QuizProject.Infrastructure.Service
             }
         }
 
-        public async Task<int> GetCount(string startDate, string endDate,string email, string role)
+        public async Task<int> GetCount(string? startDate, string? endDate,string email, string role)
         {
-            int count = 0;
-            if (role == "ADMIN")
-            {
-                count = await _userRepository.GetResultsCount(startDate, endDate);
-                return count;
-            }
-            else if (role == "USER")
-            {
-                count = await _userRepository.GetCount(email, startDate, endDate);
-                return count;
-            }
-
+            var count = await _userRepository.GetResultsCount(startDate, endDate, email, role);
             return count;
         }
 

@@ -35,12 +35,11 @@ function UserHome() {
     const [percentage, setPercentage] = useState(0);
 
     const getQuestions = async (e) => {
-        console.log("hey")
         try {
             const { data } = await UserService.getQuestions();
             setQuestions(data);
             setUserAnswers(
-                data.map((question) => ({ questionId: question.id, userAnswer: null }))
+                data.map((question) => ({ questionId: question.id, userAnswer: "" }))
             );
         } catch (error) {
             console.log(error);
@@ -48,9 +47,6 @@ function UserHome() {
     };
 
     const handleAnswer = (questionId, selectedAnswerText) => {
-        console.log(selectedAnswerText);
-        console.log(questionId);
-
         setUserAnswers((prevUserAnswers) =>
             prevUserAnswers.map((userAnswer) =>
                 userAnswer.questionId === questionId
@@ -160,7 +156,7 @@ function UserHome() {
                                                 <Box flex='1'>
                                                     <Box className='question-count'>
                                                         <Flex gap={3}>
-                                                            <Heading as='h2' size='2xl' >Question {currentQuestion + 1} / </Heading> <Heading mb={4}>    {questions.length}</Heading>
+                                                            <Heading as='h2' size='2xl' >Question {currentQuestion + 1} /  {questions.length} </Heading>
                                                         </Flex>
                                                     </Box>
                                                     <Text fontSize='3xl' >{questions[currentQuestion].questionText}</Text>

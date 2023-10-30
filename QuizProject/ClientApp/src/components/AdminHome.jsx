@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AdminService from "../services/AdminService";
 import Popup from "reactjs-popup";
 import "./AdminHome.css";
+import Overview from './Overview.jsx'
 import { nanoid } from 'nanoid';
 import {
     TableContainer,
@@ -29,7 +30,6 @@ import {
     IconButton,
     ButtonGroup,
     CardHeader,
-    Badge,
     Card,
     CardBody,
 } from "@chakra-ui/react";
@@ -61,12 +61,12 @@ function AdminHome() {
     const [value, setValue] = useState("");
     const [search, setSearch] = useState("");
     const [userSearch, setUserSearch] = useState("");
-    const [questionQount, setQuestionCount] = useState(0);
+    const [questionCount, setQuestionCount] = useState(0);
     const [userCount, setUserCount] = useState(0);
     const [resultCount, setResultCount] = useState(0);
     const pageSize = 3;
     const [pageNumber, setPageNumber] = useState(1);
-    const total = Math.ceil(questionQount / pageSize)
+    const total = Math.ceil(questionCount / pageSize)
     const labels = statistic.map((item) => item.questionText);
     const wrongCount = statistic.map((item) => item.wrongCount);
     const correctCount = statistic.map((item) => item.correctCount);
@@ -103,7 +103,7 @@ function AdminHome() {
 
     const getUsers = async () => {
         try {
-            const { data } = await AdminService.getUsers(pageNumber, pageSize, userSearch);
+            const { data } = await AdminService.getUsers(userSearch);
             setUsers(data);
         }
         catch {
@@ -146,6 +146,9 @@ function AdminHome() {
     }
 
     function addAnswerToList() {
+        if (value == "") {
+            return;
+        }
         if (isEditing === true) {
             const ans = {
                 id: nanoid(),
@@ -195,31 +198,20 @@ function AdminHome() {
         ],
     };
 
-    function deleteFromAnswerList(id) {
+    function deleteFromAnswerList(id)  {
         if (isEditing === true) {
             if (typeof id === "string") {
                 const newList = answers.filter((item) => {
                     return item.id !== id
                 })
                 setAnswer(newList);
-
-                console.log("DeleteFromAnswerList EDITING(ANSWERS):", answers)
-
-                console.log("DeleteFromAnswerList EDITING(ANSWERS):", answerList)
-
             }
             else {
                 const newList = answers.filter((item) => {
                     return item.id !== id
                 })
                 setAnswerToDelete([...answerToDelete, id])
-                console.log(answerToDelete);
                 setAnswer(newList);
-                console.log("ANSWER TO DELETE", answerToDelete);
-                console.log("DeleteFromAnswerList EDITING(ANSWERLIST):", answerList)
-
-                console.log("DeleteFromAnswerList EDITING(ANSWERS):", answers)
-
             }
             console.log(answers)
         } else {
@@ -227,8 +219,6 @@ function AdminHome() {
                 return item.id !== id
             })
             setAnswerList(newList);
-            console.log("DeleteFromAnswerList ADDING(ANSWERS):", answerList)
-
         }
 
     }
@@ -250,8 +240,9 @@ function AdminHome() {
             setAnswer([]);
             setSolution("");
             getQuestions();
-            setAnswerList([])
+            setAnswerList([]);
             getCount();
+            getStats();
         } catch (error) {
             console.log(error);
         }
@@ -263,13 +254,6 @@ function AdminHome() {
         let newAnswerList = answers.filter(x => typeof x.id === "string").map((item) => {
             return { answerText: item.answerText }
         })
-        console.log("ChangeQuestion (ANSWERS):", answers)
-        console.log("ChangeQuestion (ANSWERList):", answerList)
-        console.log("ChangeQuestion (NewAnswe):", newAnswerList)
-
-
-
-
         const questions = {
             id: questionId,
             questionText: question,
@@ -279,10 +263,11 @@ function AdminHome() {
         try {
             await AdminService.updateQuestion(questions);
             deleteAnswer();
+            getQuestions();
+            getStats();
             setAnswerToDelete([]);
             setAnswer([]);
             setAnswerList([])
-            getQuestions();
         } catch (error) {
             console.log(error);
         }
@@ -292,6 +277,8 @@ function AdminHome() {
         try {
             await AdminService.deleteQuestion(questionId);
             getQuestions();
+            getStats();
+            getCount();
         } catch (error) {
             console.error(error);
         }
@@ -321,13 +308,16 @@ function AdminHome() {
     };
 
     useEffect(() => {
-        getQuestions();
         getUsers();
         getCount();
         getResultCount();
         getStats();
         getUserCount();
-    }, [pageNumber]);
+    }, []);
+
+    useEffect(() => {
+        getQuestions();
+    }, [pageNumber])
     return (
         <Box>
             <Center>
@@ -452,7 +442,7 @@ function AdminHome() {
                     }
                     <Flex flexDirection="row" w="90vw" gap={3} >
                         <Box w='60vw'>
-                            <Flex direction='column' gap={3}>
+                            <Flex direction='column' gap={7}>
                                 <Card>                    
                                 <CardHeader align='center'>
                                         <Heading color='#1D3557' size='xl'>Questions</Heading>
@@ -529,41 +519,23 @@ function AdminHome() {
                                             </ButtonGroup>
                                         </Box>
                                 </Card>
-                                <Card h='300px' p='2'>
-                                    <Line width={120} height={30} data={chartData} options={options} />
+                                <Card h='500px' p='2'>
+                                    <CardHeader align='center'>
+                                        <Heading color='#1D3557' size='xl'>Question statistic</Heading>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <Line width={120} height={30} data={chartData} options={options} />
+                                    </CardBody>
                                 </Card>
                             </Flex>
                         </Box>
                         <Box w='30vw'>
-                            <Flex flexDirection='column' gap={ 3 }>
-                                <Card w='100%'>
-                                    <CardHeader align='center'>
-                                        <Heading color='#1D3557' size='xl'>Overview</Heading>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Center gap={10}>
-                                            <Flex direction='column' align='center'>
-                                                <Text>Questions</Text>
-                                                <Badge borderRadius="50%" border="5px solid #1D3557" variant="solid" colorScheme="teal" >
-                                                    <RoundedBadge number={questionQount} />
-                                                </Badge>
-                                            </Flex>
-                                            <Flex direction='column' align='center'>
-                                                <Text>Users</Text>
-                                            <Badge borderRadius="50%" variant="solid" border="5px solid #E63946" colorScheme="teal">
-                                                    <RoundedBadge number={userCount} />
-                                                </Badge>
-                                            </Flex>
-                                            <Flex direction='column' align='center'>
-                                                <Text>Solved</Text>
-                                            <Badge borderRadius="50%" variant="solid" border="5px solid #283618" colorScheme="teal">
-                                                    <RoundedBadge number={resultCount} />
-                                                </Badge>
-                                            </Flex>
+                            <Flex flexDirection='column' gap={8}>
+                                <Overview
+                                    questionCount={questionCount}
+                                    userCount={userCount}
+                                    resultCount={resultCount}></Overview>
 
-                                        </Center>
-                                    </CardBody>
-                                </Card>
                                 <Card>
                                     <CardHeader align='center'>
                                         <Heading color='#1D3557' size='xl'>Users</Heading>                            
@@ -606,29 +578,6 @@ function AdminHome() {
 };
  const options = {
      responsive: true,
-    plugins: {
-        title: {
-            display: true,
-            text: 'Question Statistic',
-        },
-    },
 };
 
-function RoundedBadge({ number }) {
-    return (
-        <Box
-            width="100px"
-            height="100px"
-            borderRadius="50%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            bg="white" 
-            color="#1D3557"
-            fontSize="20px" 
-        >
-            {number}
-        </Box>
-    );
-}
 export default AdminHome;
