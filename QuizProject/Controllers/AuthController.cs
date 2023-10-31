@@ -13,7 +13,6 @@ namespace QuizProject.Controllers
         private readonly IAuthService _authService;
         private readonly ILogger<AdminController> _logger;
 
-
         public AuthController(IAuthService authService, ILogger<AdminController> logger)
         {
             _authService = authService;

@@ -21,8 +21,8 @@ namespace QuizProject.MappingConfigurations
             {
                 AnswerText= answerDTO.AnswerText,
                 QuestionId = src.Id
-            })))
-                ;
+            })));
+
             CreateMap<Question, QuestionsForUserDTO>()
                 .ForMember(dest => dest.Answers, otp => otp.MapFrom(src => src.Answers.ToList()));
 

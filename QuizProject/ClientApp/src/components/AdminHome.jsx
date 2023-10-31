@@ -1,5 +1,4 @@
-﻿
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import AdminService from "../services/AdminService";
 import Popup from "reactjs-popup";
 import "./AdminHome.css";
@@ -44,7 +43,6 @@ import {
     Tooltip,
     Legend } from 'chart.js';
 import { ArrowLeftIcon, DeleteIcon, SearchIcon, ArrowRightIcon } from '@chakra-ui/icons'
-
 
 function AdminHome() {
     const [question, setQuestion] = useState("");
@@ -141,12 +139,8 @@ function AdminHome() {
         }
     }
 
-    const deleteAnswer = async () => {
-        await AdminService.deleteAnswer(answerToDelete);
-    }
-
     function addAnswerToList() {
-        if (value == "") {
+        if (value === "") {
             return;
         }
         if (isEditing === true) {
@@ -261,13 +255,13 @@ function AdminHome() {
             rightAnswer: solution,
         };
         try {
+            await AdminService.deleteAnswer(answerToDelete);
             await AdminService.updateQuestion(questions);
-            deleteAnswer();
-            getQuestions();
-            getStats();
             setAnswerToDelete([]);
             setAnswer([]);
             setAnswerList([])
+            getStats();
+            getQuestions();
         } catch (error) {
             console.log(error);
         }
