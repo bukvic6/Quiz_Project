@@ -62,6 +62,7 @@ function AdminHome() {
     const [questionCount, setQuestionCount] = useState(0);
     const [userCount, setUserCount] = useState(0);
     const [resultCount, setResultCount] = useState(0);
+    const [refresh, setRefresh] = useState(false);
     const pageSize = 3;
     const [pageNumber, setPageNumber] = useState(1);
     const total = Math.ceil(questionCount / pageSize)
@@ -216,6 +217,7 @@ function AdminHome() {
         }
 
     }
+    const toggleRefresh = () => setRefresh(value => !value);
 
     const addQuestion = async (e) => {
         e.preventDefault();
@@ -223,20 +225,18 @@ function AdminHome() {
         let newAnswerList = answerList.map((item) => {
             return { answerText: item.answerText };
         })
-        const questions = {
+        const questionAdd = {
             questionText: question,
             answers: newAnswerList,
             rightAnswer: solution,
         };
         try {
-            await AdminService.createQuestion(questions);
+            await AdminService.createQuestion(questionAdd);
             setQuestion("");
             setAnswer([]);
             setSolution("");
-            getQuestions();
             setAnswerList([]);
-            getCount();
-            getStats();
+            toggleRefresh();
         } catch (error) {
             console.log(error);
         }
@@ -260,8 +260,8 @@ function AdminHome() {
             setAnswerToDelete([]);
             setAnswer([]);
             setAnswerList([])
-            getStats();
-            getQuestions();
+            toggleRefresh();
+
         } catch (error) {
             console.log(error);
         }
@@ -270,9 +270,7 @@ function AdminHome() {
     const handleDelete = async (questionId) => {
         try {
             await AdminService.deleteQuestion(questionId);
-            getQuestions();
-            getStats();
-            getCount();
+            toggleRefresh();
         } catch (error) {
             console.error(error);
         }
@@ -280,15 +278,13 @@ function AdminHome() {
 
     const handleSearch = () => {
         setPageNumber(1);
-        getQuestions();
-        getCount();
+        toggleRefresh();
         setSearch("");
     }
 
     const handleUserSearch = () => {
         setPageNumber(1);
         getUsers();
-        getCount();
         setUserSearch("");
     }
 
@@ -303,15 +299,15 @@ function AdminHome() {
 
     useEffect(() => {
         getUsers();
-        getCount();
         getResultCount();
-        getStats();
         getUserCount();
     }, []);
 
     useEffect(() => {
+        getCount();
+        getStats();
         getQuestions();
-    }, [pageNumber])
+    }, [pageNumber, refresh])
     return (
         <Box>
             <Center>

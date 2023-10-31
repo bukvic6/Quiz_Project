@@ -21,6 +21,9 @@ function Results() {
     const total = Math.ceil(rowCount / pageSize)
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [refresh, setRefresh] = useState(false);
+
+    const toggleRefresh = () => setRefresh(value => !value);
 
     const getCount = async () => {
         try {
@@ -69,8 +72,7 @@ function Results() {
 
     const onChange = () => {
         setPageNumber(1);
-        getCount();
-        getResults();
+        toggleRefresh();
     };
 
     useEffect(() => {
@@ -88,6 +90,7 @@ function Results() {
 
     useEffect(() => {
         getResults();
+        getCount();
     }, [pageNumber]);
 
     return (
